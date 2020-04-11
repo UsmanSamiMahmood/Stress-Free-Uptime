@@ -3,9 +3,11 @@
 # Automatic-Website-Checker
 
 # Future Developments
-Alternate system to use if the website doesn't return 200[OK].
-Use a database and make a website panel.
-Logging.
+**Alternate system to use if the website doesn't return 200[OK].**
+
+**Use a database and make a website panel.**
+
+**Logging.**
 
 # Stealing Code / Self Hosting
 Self-hosting of this service is not supported, nor will there be any support provided to the people that try. The code of this service was made public for people who want to see how the service works, or want to contribute to it.
