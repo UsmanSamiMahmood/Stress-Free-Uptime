@@ -7,27 +7,12 @@ Alternate system to use if the website doesn't return 200[OK].
 Use a database and make a website panel.
 Logging.
 
-# Installation
-***Make sure you have Node.js installed.***
-
-```
-npm init -y
-```
-
-```
-npm i request request-promise
-```
-
-Go to **config.json** and edit the three values.
-
-![](https://cdn.discordapp.com/attachments/695841512893710336/698545491692093580/unknown.png)
-
-```
-node index.js
-```
+# Stealing Code / Self Hosting
+Self-hosting of this service is not supported, nor will there be any support provided to the people that try. The code of this service was made public for people who want to see how the service works, or want to contribute to it.
 
 # Contact
 Discord: MrShadow#0001
+Discord: ♰ R1zeN#0001
 
 # License
 
