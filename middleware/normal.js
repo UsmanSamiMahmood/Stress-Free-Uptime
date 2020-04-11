@@ -12,12 +12,18 @@ router.get("/", (req, res, next) => {
     if (blackListedIPs.includes(ip)) {
         return res.write(`Your IP ${ip} is blacklisted from using our services, have a good day.`)
     } else {
-        return res.render("index");
+        return res.render("index")
     }
 })
+
 });
 router.get("/login", (req, res, next) => {
     return res.render("login")
+})
+
+router.post("/login", (req, res, next) => {
+    console.log(req.body.email)
+    console.log(req.body.password)
 })
 
 module.exports = router;
