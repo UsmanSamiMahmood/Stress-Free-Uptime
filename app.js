@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
+var color = require('colors');
 const moment = require("moment");
 const figlet = require("figlet");
 const fs = require("fs");
@@ -19,6 +20,10 @@ admin.initializeApp({
   });
 
 const db = admin.firestore();
+
+//const isBlacklisted = array.includes(ip) ? true : false
+
+
 
 app.set("view engine", "ejs");
 app.use(express.static("views"));
