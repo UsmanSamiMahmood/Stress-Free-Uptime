@@ -35,7 +35,7 @@ function checkStatus(url) {
                     }]
                 },
                 json: true,
-            }
+            };
             // Below is the part where we actually post the data.
             return requestPromise(option)
                 .then(function(parsedBody) {
@@ -74,7 +74,7 @@ function checkStatus(url) {
             // Below is the part where we actually post the data.
             requestPromise(option2)
                 .then(function(parsedBody) {
-                    console.log('Website offline, webhook sent.');
+                    console.log("Website offline, webhook sent.");
                 })
                 .catch(function(err) {
                     console.log(`Error encountered whilst attempting to send webhook: ${err}.`);
