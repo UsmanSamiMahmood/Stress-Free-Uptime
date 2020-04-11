@@ -1,3 +1,5 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/fb5ec0bb20314aa88ded501392f8b5f0)](https://www.codacy.com/manual/SergeantShadoww/Automatic-Website-Checker?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=UsmanSamiMahmood/Automatic-Website-Checker&amp;utm_campaign=Badge_Grade)
+
 # Automatic-Website-Checker
 
 # Future Developments
