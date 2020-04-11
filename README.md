@@ -9,6 +9,10 @@ Logging.
 ***Make sure you have Node JS installed.***
 
 ```
+npm init -y
+```
+
+```
 npm i request request-promise
 ```
 
