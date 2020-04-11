@@ -1,4 +1,4 @@
-# AutomaticWebsiteChecker
+# Automatic-Website-Checker
 
 # Future Developments
 Alternate system to use if the website doesn't return 200[OK].
