@@ -1,0 +1,28 @@
+{
+  "name": "Automatic-Website-Checker",
+  "version": "1.0.0",
+  "description": "Alternate system to use if the website doesn't return 200[OK].\r Use a database and make a website panel.\r Logging.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UsmanSamiMahmood/Automatic-Website-Checker.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/UsmanSamiMahmood/Automatic-Website-Checker/issues"
+  },
+  "homepage": "https://github.com/UsmanSamiMahmood/Automatic-Website-Checker#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-rate-limit": "^5.1.1",
+    "firebase-admin": "^8.10.0",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.5"
+  }
+}
