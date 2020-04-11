@@ -18,7 +18,6 @@ const limiter = rateLimit({
   windowMs: 900000,
   max: 100,
 })
-const initializePassport = require('./secrets/passport-config.js')
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
@@ -28,8 +27,6 @@ admin.initializeApp({
 const db = admin.firestore();
 
 //const isBlacklisted = array.includes(ip) ? true : false
-
-
 
 app.set("view engine", "ejs");
 app.use("/views",express.static(__dirname + "/views"));
