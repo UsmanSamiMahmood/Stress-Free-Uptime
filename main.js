@@ -7,7 +7,7 @@ const request = require("request");
 const requestPromise = require("request-promise");
 
 // This file stores the url we will be using for posting the webhooks as well as the url of the website we're checking.
-const config = require("./config.json");
+const config = require("./secrets/config.json");
 
 // Making the function where we check the status of the website.
 function checkStatus(url) {
