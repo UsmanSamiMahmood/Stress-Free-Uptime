@@ -78,7 +78,7 @@ function checkStatus(url) {
                 })
                 .catch(function(err) {
                     console.log(`Error encountered whilst attempting to send webhook: ${err}.`);
-                })
+                });
         }
     });
 }
