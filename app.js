@@ -20,7 +20,7 @@ admin.initializeApp({
 
 const db = admin.firestore();
 
-app.set("view-engine", "ejs");
+app.set("view engine", "ejs");
 app.use(express.static("views"));
 app.use("/", limiter, normalRoute);
 
