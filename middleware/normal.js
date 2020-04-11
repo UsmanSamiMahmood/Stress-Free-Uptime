@@ -1,9 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const { db } = require("../app.js")
-let location = db.collection("data")
-let locget = location.get()
-let ips = locget.data().blacklisted
+const { db } = require("../database/handler");
+let location = db.collection("data").doc("permissionCheck")
+    .get().then((doc) => {
+        let blackListedIPs = doc.data().blacklistedIPs
+    
+    console.log(blackListedIPs);
+    
 
 router.get("/", (req, res, next) => {
     return res.render("index");
@@ -12,5 +15,6 @@ router.get("/", (req, res, next) => {
 router.get("/login", (req, res, next) => {
     return res.render("login")
 })
+});
 
 module.exports = router;

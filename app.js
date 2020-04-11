@@ -6,8 +6,6 @@ const moment = require("moment");
 const figlet = require("figlet");
 const fs = require("fs");
 const rateLimit = require("express-rate-limit");
-const admin = require("firebase-admin")
-const serviceAccount = require("./secrets/serviceAccount.json");
 const normalRoute = require("./middleware/normal");
 const bcrypt = require("bcrypt");
 const passport = require("passport");
@@ -18,14 +16,6 @@ const limiter = rateLimit({
   windowMs: 900000,
   max: 100,
 })
-
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://uptimechecker-1ad70.firebaseio.com"
-  });
-
-const db = admin.firestore();
-exports.db = db;
 
 //const isBlacklisted = array.includes(ip) ? true : false
 
