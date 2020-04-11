@@ -13,6 +13,7 @@ npm i request request-promise
 ```
 
 Go to **config.json** and edit the three values.
+
 ![](https://cdn.discordapp.com/attachments/695841512893710336/698545491692093580/unknown.png)
 
 ```
