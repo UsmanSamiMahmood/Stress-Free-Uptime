@@ -1,5 +1,5 @@
 {
-  "name": "Automatic-Website-Checker",
+  "name": "automatic-website-checker",
   "version": "1.0.0",
   "description": "Alternate system to use if the website doesn't return 200[OK].\r Use a database and make a website panel.\r Logging.",
   "main": "main.js",
