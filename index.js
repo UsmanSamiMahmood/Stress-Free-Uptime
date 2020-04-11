@@ -39,10 +39,10 @@ function checkStatus(url) {
             }
             return requestPromise(option)
                 .then(function(parsedBody) {
-                    console.log('Website offline, webhook sent.')
+                    console.log('Website offline, webhook sent.');
                 })
                 .catch(function(err) {
-                    console.log(`Error encountered whilst attempting to send webhook: ${err}.`)
+                    console.log(`Error encountered whilst attempting to send webhook: ${err}.`);
                 })
         }
 
