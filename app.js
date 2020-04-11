@@ -26,7 +26,7 @@ const db = admin.firestore();
 
 
 app.set("view engine", "ejs");
-app.use(express.static("views"));
+app.use(express.static(__dirname + "/views"));
 app.use("/", limiter, normalRoute);
 
 
