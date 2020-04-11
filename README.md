@@ -6,7 +6,7 @@ Use a database and make a website panel.
 Logging.
 
 # Installation
-***Make sure you have Node JS installed.***
+***Make sure you have Node.js installed.***
 
 ```
 npm init -y
