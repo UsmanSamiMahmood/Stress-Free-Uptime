@@ -13,40 +13,7 @@ const config = require("./config.json");
 function checkStatus(url) {
     request(`${url}`, function(error, response) {
         // An error is not anticipated but as always it could happen so below we will set up error handling, a webhook will be sent to notify me.
-        if (error) {
-            var option = {
-                method: "POST",
-                url: `${config.ERROR_WEBHOOK_URL}`,
-                body: {
-                    "embeds": [{
-                        "author": {
-                            "name": "Automatic Website Status Checker",
-                            "url": "https://github.com/UsmanSamiMahmood/Automatic-Website-Checker/"
-                        },
-                        "title": "Request Failed",
-                        "url": "https://github.com/UsmanSamiMahmood/Automatic-Website-Checker/",
-                        "description": `We tried to send a request to ${url} but it errored:  || error: ${error}`,
-                        "footer": {
-                            "text": "Website Checker."
-                        },
-                        "thumbnail": {
-                            "url": "https://upload.wikimedia.org/wikipedia/en/b/bc/Title_screen_for_the_Netflix_series_Shadow.png" 
-                        }
-                    }]
-                },
-                json: true,
-            };
-            // Below is the part where we actually post the data.
-            return requestPromise(option)
-                .then(function(parsedBody) {
-                    console.log('Website offline, webhook sent.');
-                })
-                .catch(function(err) {
-                    console.log(`Error encountered whilst attempting to send webhook: ${err}.`);
-                })
-        }
 
-        console.log(`Request Sent. Code: ${response.statusCode} || Message: ${response.statusMessage}`);
         if(response.statusCode !== 200) {
             // If the status code is anything other than 200 then we will class this as the website being offline then a webhook will be sent to a discord channel to notify me.
             var option2 = {
@@ -79,6 +46,39 @@ function checkStatus(url) {
                 .catch(function(err) {
                     console.log(`Error encountered whilst attempting to send webhook: ${err}.`);
                 });
+        }
+
+        if (error) {
+            var option = {
+                method: "POST",
+                url: `${config.ERROR_WEBHOOK_URL}`,
+                body: {
+                    "embeds": [{
+                        "author": {
+                            "name": "Automatic Website Status Checker",
+                            "url": "https://github.com/UsmanSamiMahmood/Automatic-Website-Checker/"
+                        },
+                        "title": "Request Failed",
+                        "url": "https://github.com/UsmanSamiMahmood/Automatic-Website-Checker/",
+                        "description": `We tried to send a request to ${url} but it errored:  || error: ${error}`,
+                        "footer": {
+                            "text": "Website Checker."
+                        },
+                        "thumbnail": {
+                            "url": "https://upload.wikimedia.org/wikipedia/en/b/bc/Title_screen_for_the_Netflix_series_Shadow.png" 
+                        }
+                    }]
+                },
+                json: true,
+            };
+            // Below is the part where we actually post the data.
+            return requestPromise(option)
+                .then(function(parsedBody) {
+                    console.log('Website offline, webhook sent.');
+                })
+                .catch(function(err) {
+                    console.log(`Error encountered whilst attempting to send webhook: ${err}.`);
+                })
         }
     });
 }
