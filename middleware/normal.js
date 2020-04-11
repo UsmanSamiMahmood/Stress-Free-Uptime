@@ -7,19 +7,27 @@ let location = db.collection("data").doc("permissionCheck")
 
 router.get("/", (req, res, next) => {
     let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    ip = ip.split("::ffff:")//[0]
-    console.log(ip)
+    ip = ip.split("::ffff:")[1]
     if (blackListedIPs.includes(ip)) {
-        return res.write(`Your IP ${ip} is blacklisted from using our services, have a good day.`)
+        res.status(502)
+        return res.send(`Your IP: ${ip} is blacklisted from using our services, have a good day.`)
     } else {
+        res.status(200)
         return res.render("index")
     }
 })
-
-});
 router.get("/login", (req, res, next) => {
-    return res.render("login")
+    let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    ip = ip.split("::ffff:")[1]
+    if (blackListedIPs.includes(ip)) {
+        res.status(502)
+        return res.send(`Your IP: ${ip} is blacklisted from using our services, have a good day.`)
+    } else {
+        res.status(200)
+        return res.render("login");
+    }
 })
+});
 
 router.post("/login", (req, res, next) => {
     console.log(req.body.email)
