@@ -44,7 +44,7 @@ function checkStatus(url) {
                     console.log("Website offline, webhook sent.");
                 })
                 .catch(function(err) {
-                    console.error(`Error encountered whilst attempting to send webhook: ${err}.`)
+                    console.error(`Error encountered whilst attempting to send webhook: ${err}.`);
                 });
         }
 
