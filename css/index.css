@@ -1,4 +1,21 @@
 body {
-    background: #ff44;
-    background-color: rgb(10, 119, 214);
+    background: rgba(41, 90, 119, 0.267);
+}
+
+/* Body of Page */
+
+/* Footer */
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: gray;
+    color: white;
+    text-align: center;
+  }
+
+.footer p {
+    font-weight: bold;
+    letter-spacing: 1px;
 }
