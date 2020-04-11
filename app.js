@@ -25,6 +25,7 @@ admin.initializeApp({
   });
 
 const db = admin.firestore();
+exports.db = db;
 
 //const isBlacklisted = array.includes(ip) ? true : false
 
