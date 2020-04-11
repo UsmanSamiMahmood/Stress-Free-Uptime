@@ -14,7 +14,6 @@ function checkStatus(url) {
     request(`${url}`, function(error, response) {
         // An error is not anticipated but as always it could happen so below we will set up error handling, a webhook will be sent to notify me.
         if (error) {
-            console.log(error);
             var option = {
                 method: "POST",
                 url: `${config.ERROR_WEBHOOK_URL}`,
@@ -37,6 +36,7 @@ function checkStatus(url) {
                 },
                 json: true,
             }
+            // Below is the part where we actually post the data.
             return requestPromise(option)
                 .then(function(parsedBody) {
                     console.log('Website offline, webhook sent.');
@@ -71,7 +71,8 @@ function checkStatus(url) {
                 },
                 json: true,
             };
-            requestPromise(option)
+            // Below is the part where we actually post the data.
+            requestPromise(option2)
                 .then(function(parsedBody) {
                     console.log('Website offline, webhook sent.');
                 })
@@ -82,6 +83,5 @@ function checkStatus(url) {
     });
 }
 
-// Replace the url in the quotes.
 // Interval is set to 1 minute but you can change it to what you like I just thought 1 minute is a reasonable time.
 setInterval(checkStatus, 60000, `${config.URL_CHECKED}`);
