@@ -41,10 +41,10 @@ function checkStatus(url) {
             // Below is the part where we actually post the data.
             requestPromise(option2)
                 .then(function() {
-                    console.log("Website offline, webhook sent.");
+                    Console.log("Website offline, webhook sent.");
                 })
                 .catch(function(err) {
-                    console.error(`Error encountered whilst attempting to send webhook: ${err}.`);
+                    Console.error(`Error encountered whilst attempting to send webhook: ${err}.`);
                 });
         }
 
