@@ -7,14 +7,14 @@ const request = require("request");
 const requestPromise = require("request-promise");
 
 // This file stores the url we will be using for posting the webhooks as well as the url of the website we're checking.
-const config = require("./config.json")
+const config = require("./config.json");
 
 // Making the function where we check the status of the website.
 function checkStatus(url) {
     request(`${url}`, function(error, response) {
         // An error is not anticipated but as always it could happen so below we will set up error handling, a webhook will be sent to notify me.
         if (error) {
-            console.log(error)
+            console.log(error);
             var option = {
                 method: "POST",
                 url: `${config.ERROR_WEBHOOK_URL}`,
@@ -25,7 +25,7 @@ function checkStatus(url) {
                             "url": "https://github.com/UsmanSamiMahmood/Automatic-Website-Checker/"
                         },
                         "title": "Request Failed",
-                        "url": `https://github.com/UsmanSamiMahmood/Automatic-Website-Checker/`,
+                        "url": "https://github.com/UsmanSamiMahmood/Automatic-Website-Checker/",
                         "description": `We tried to send a request to ${url} but it errored:  || error: ${error}`,
                         "footer": {
                             "text": "Website Checker."
@@ -46,17 +46,17 @@ function checkStatus(url) {
                 })
         }
 
-        console.log(`Request Sent. Code: ${response.statusCode} || Message: ${response.statusMessage}`)
-        if(response.statusCode != 200) {
+        console.log(`Request Sent. Code: ${response.statusCode} || Message: ${response.statusMessage}`);
+        if(response.statusCode !== 200) {
             // If the status code is anything other than 200 then we will class this as the website being offline then a webhook will be sent to a discord channel to notify me.
-            var option = {
+            var option2 = {
                 method: "POST",
                 url: `${config.STATUS_WEBHOOK_URL}`,
                 body: {
                     "embeds": [{
                         "author": {
                             "name": "Automatic Website Status Checker",
-                            "url": "https://github.com/UsmanSamiMahmood/Automatic-Website-Checker/"
+                            "url": "https://github.com/UsmanSamiMahmood/"
                         },
                         "title": "Website Offline",
                         "url": `${url}`,
@@ -70,18 +70,18 @@ function checkStatus(url) {
                     }]
                 },
                 json: true,
-            }
+            };
             requestPromise(option)
                 .then(function(parsedBody) {
-                    console.log('Website offline, webhook sent.')
+                    console.log('Website offline, webhook sent.');
                 })
                 .catch(function(err) {
-                    console.log(`Error encountered whilst attempting to send webhook: ${err}.`)
+                    console.log(`Error encountered whilst attempting to send webhook: ${err}.`);
                 })
         }
-    })
+    });
 }
 
 // Replace the url in the quotes.
 // Interval is set to 1 minute but you can change it to what you like I just thought 1 minute is a reasonable time.
-setInterval(checkStatus, 60000, `${config.URL_CHECKED}`)
+setInterval(checkStatus, 60000, `${config.URL_CHECKED}`);
