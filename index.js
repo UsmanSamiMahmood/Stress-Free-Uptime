@@ -22,10 +22,10 @@ function checkStatus(url) {
                     "embeds": [{
                         "author": {
                             "name": "Automatic Website Status Checker",
-                            "url": "https://github.com/UsmanSamiMahmood/"
+                            "url": "https://github.com/UsmanSamiMahmood/Automatic-Website-Checker/"
                         },
                         "title": "Request Failed",
-                        "url": `https://github.com/UsmanSamiMahmood/`,
+                        "url": `https://github.com/UsmanSamiMahmood/Automatic-Website-Checker/`,
                         "description": `We tried to send a request to ${url} but it errored:  || error: ${error}`,
                         "footer": {
                             "text": "Website Checker."
@@ -56,7 +56,7 @@ function checkStatus(url) {
                     "embeds": [{
                         "author": {
                             "name": "Automatic Website Status Checker",
-                            "url": "https://github.com/UsmanSamiMahmood/"
+                            "url": "https://github.com/UsmanSamiMahmood/Automatic-Website-Checker/"
                         },
                         "title": "Website Offline",
                         "url": `${url}`,
