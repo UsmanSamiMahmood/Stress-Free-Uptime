@@ -8,11 +8,17 @@ const fs = require("fs");
 const rateLimit = require("express-rate-limit");
 const admin = require("firebase-admin")
 const serviceAccount = require("./secrets/serviceAccount.json");
-const normalRoute = require("./middleware/normal")
+const normalRoute = require("./middleware/normal");
+const bcrypt = require("bcrypt");
+const passport = require("passport");
+const flash = require("express-flash");
+const session = require("express-session");
+const methodOverride = require("method-override");
 const limiter = rateLimit({
   windowMs: 900000,
   max: 100,
 })
+const initializePassport = require('./secrets/passport-config.js')
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
