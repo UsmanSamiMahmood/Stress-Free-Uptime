@@ -6,11 +6,11 @@ let location = db.collection("data").doc("permissionCheck")
         let blackListedIPs = doc.data().blacklistedIPs
 
 router.get("/", (req, res, next) => {
-    let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    ip = ip.split("::ffff:")//[0]
-    console.log(ip)
-    if (blackListedIPs.includes(ip)) {
-        return res.write(`Your IP ${ip} is blacklisted from using our services, have a good day.`)
+    let hey = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    hey = hey.split("::ffff:")[1]
+    console.log(hey)
+    if (blackListedIPs.includes(hey)) {
+        res.send(`Your IP ${hey} is blacklisted from using our services, have a good day.`)
     } else {
         return res.render("index");
     }
