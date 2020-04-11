@@ -12,7 +12,7 @@ Self-hosting of this service is not supported, nor will there be any support pro
 
 # Contact
 Discord: MrShadow#0001
-Discord: ♰ R1zeN#0001
+\nDiscord: ♰ R1zeN#0001
 
 # License
 
