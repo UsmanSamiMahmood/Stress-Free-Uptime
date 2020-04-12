@@ -27,6 +27,7 @@ app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: false }));
 app.use("/views",express.static(__dirname + "/views"));
 app.use("/css",express.static(__dirname + "/css"));
+app.use("/js",express.static(__dirname + "/js"))
 app.use("/", apilimiter, normalRoute);
 app.use("/api", limiter, apiRoute);
 

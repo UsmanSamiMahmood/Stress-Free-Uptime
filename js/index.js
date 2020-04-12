@@ -1,7 +1,6 @@
-function temp(){
-    let email = document.getElementById("email");
-    let password = document.getElementById("password");
-    console.log(`${email} is email and ${password} is password.`)
+function temp(body) {
+    var json = JSON.parse(body)
+    swal(json.title, json.message, json.type);
 }
 
 document.getElementById("buttonreg").addEventListener("click", temp)
