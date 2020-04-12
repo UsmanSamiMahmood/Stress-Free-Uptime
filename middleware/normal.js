@@ -16,6 +16,19 @@ router.get("/", (req, res, next) => {
         return res.render("index")
     }
 })
+
+router.get("/dashboard", (req, res, next) => {
+    let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    ip = ip.split("::ffff:")[1]
+    if (blackListedIPs.includes(ip)) {
+        res.status(502)
+        return res.send(`Your IP: ${ip} is blacklisted from using our services, have a good day.`)
+    } else {
+        res.status(200)
+        return res.render("dashboard")
+    }
+})
+
 router.get("/login", (req, res, next) => {
     let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     ip = ip.split("::ffff:")[1]
