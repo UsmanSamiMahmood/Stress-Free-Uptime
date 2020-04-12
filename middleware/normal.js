@@ -23,6 +23,11 @@ router.get("/login", (req, res, next) => {
         res.status(502)
         return res.send(`Your IP: ${ip} is blacklisted from using our services, have a good day.`)
     } else {
+        const doc = db.collection("data").doc("activity");
+        doc.get().then(foundDoc => {
+            const old = foundDoc.data().count;
+            doc.update("count", old+1)
+        });
         res.status(200)
         return res.render("login");
     }
@@ -30,7 +35,7 @@ router.get("/login", (req, res, next) => {
 });
 
 router.post("/login", async(req, res, next) => {
-    console.log(req.body)
+    console.log(req.body.ad)
     console.log(req.params)
     console.log(req.query)
 })
