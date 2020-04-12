@@ -14,7 +14,7 @@
    <h2 id="fail"></h2>
   </center>
   <div class="container align-middle">
-    <form method="POST">
+    <form>
         <div class="form-group">
           <label for="exampleInputEmail1">Email address</label>
           <input placeholder="example@e-mail.com" name="email" type="email" class="form-control" id="email" aria-describedby="emailHelp" required>
@@ -26,12 +26,14 @@
         </div>
         <p>Not registered yet? <a href="http://127.0.0.1/register">Sign up here</a></p><br>
         
-        <button type="button" onclick="authorize()" class="btn btn-primary">Login</button>
+        <button type="submit" id="submitButton" class="btn btn-primary">Login</button>
       </form>
     </div>
     <script>
       import db from "handler.js"
       var bcrypt = dcodeIO.bcrypt;
+
+      document.getElementById("submitButton").addEventListener("click", authorize())
 
       function authorize() {
       db.collection("users").where("email", "==", document.getElementById("email").value)
