@@ -29,9 +29,4 @@ router.get("/login", (req, res, next) => {
 })
 });
 
-router.post("/login", (req, res, next) => {
-    console.log(req.body.email)
-    console.log(req.body.password)
-})
-
 module.exports = router;
