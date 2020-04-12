@@ -17,7 +17,11 @@ body {
     width: 100px;
 }
 /* Body of Page */
+.title {
+    font-weight: bold;
+}
 
+.textBox
 /* Footer */
 .footer {
     position: fixed;
