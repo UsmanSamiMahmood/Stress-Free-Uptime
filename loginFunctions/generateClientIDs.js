@@ -1,7 +1,16 @@
 const { db } = require("../database/handler");
 
-module.exports.generateUserID = function(length) {
-    let uid = Math.random().toString(36).substring(15);
+function makeID() {
+    var number = Math.random()
+    number.toString(36)
+    var id = number.toString(36).substr(2, 9)
+    id.length >= 9;
+    return id
+}
+
+let uid = makeID();
+
+function generateUserID() {
     let docRef = db.collection('users').doc(uid);
     let getDoc = docRef.get()
     .then(doc => {
@@ -24,3 +33,5 @@ module.exports.generateUserID = function(length) {
     });
 
 }
+
+module.exports = generatorFunctions;

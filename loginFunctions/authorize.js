@@ -1,5 +1,4 @@
 const bcrypt = require('bcrypt');
-const { hashPassword } = require("./generateClientIDs");
 const { db } = require("../database/handler");
 
 function authorize(email, password) {
@@ -11,15 +10,15 @@ function authorize(email, password) {
             }  
 
             snapshot.forEach(doc => {
-                bcrypt.compare(password, doc.data().password, function(err, result) {
-                    return true;
+                console.log(doc.data())
+                return bcrypt.compare(password, doc.data().password, function(err, result) {
+                    if (result) return true
+                    else return false;
                 })
             });
         })
         .catch(err => {
             console.log('Error getting documents', err);
+            return false;
         });
-        return false;
 }
-
-console.log(authorize("dawsawd@wadwa.com", "2e1r4wq2rwq1f") == true ? "Correct login" : "Incorrect login")
