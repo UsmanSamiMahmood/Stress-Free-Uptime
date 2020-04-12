@@ -12,7 +12,7 @@
     <!-- Nav -->
     <nav>
         <!-- Login Button -->
-        <button type="button" onclick="window.location.replace('http://127.0.0.1:80/login')" class="btn btn-success loginButton">Login</button>
+        <button type="button" onclick="window.location.replace('http://127.0.0.1:80/login')" class="btn btn-info loginButton">Login</button>
     </nav>
     <!-- Body -->
     <center>
@@ -20,8 +20,48 @@
             Stress Free Uptime
         </h1>
     </center>
-
-    <div class="textBox">xD</div>
+    <!-- Text Boxes -->
+    <center>
+        <div class="container">
+        <div class="textBox textBox-firstElement"><h2>What services do we provide?</h2><br>
+        <p>At Stress Free Uptime we offer an outstanding website monitoring service for next to nothing.
+            Get real time statistics and notifications if your website ever goes offline and real time monitoring.
+            Stress Free Uptime currently only offers three monitors per user due to us being in the beta stage, if you would like more please upgrade to premium!</p>
+        </div>
+        <div class="textBox textBox-firstElement"><h2>About the creators.</h2><br>
+            <h3 class="devName">Jonas Schi&oslash;tt</h3>
+            <p class="devBio">
+                <strong>I am Jonas Schi&oslash;tt.</strong><br>
+                I am a 15 year old fullstack developer. 
+                I am capable of programming in <code>Java, JavaScript, Python, C# & more</code> 
+                I am very experienced for my age, my main focus is to provide you with a user-friendly UI! <br>
+                I am primarily known for making the advanced the Discord-bot <em>Aleph</em>.
+            </p>
+            <h3 class="devName">Usman Mahmood</h3>
+            <p class="devBio">
+                <strong>I am Usman Mahmood</strong><br>
+                I am an experienced back-end web developer.
+                I am 15 years of age and have an overall positive attitude/approach to programming.
+                I have experience with APIs, and are able to work closely with other programmers to ultimately create the best product as possible.
+                I am capable of programming in:
+                Javascript, Python, Visual Basic, & more
+                But my main areas of development are with Javascript and Python.
+            </p>
+        </div>
+        <div class="textBox"><h2>Contact us.</h2><br>
+            <h3 class="devName">Jonas Schi&oslash;tt</h3>
+            <p class="devBio">
+                <strong>Discord: <%= jonasDiscord %> </strong><br>
+                <strong>E-Mail: <%= jonasMail %> </strong>
+            </p>
+            <h3 class="devName">Usman Mahmood</h3>
+            <p class="devBio">
+                <strong>Discord: <%= usmanDiscord %> </strong><br>
+                <strong>E-Mail: <%= usmanMail %> </strong>
+            </p>
+        </div>
+    </div>
+</center>
     <!-- Footer -->
     <div class="alert footer" role="alert">
         <p>Stress Free Uptime - &copy; StressFreeUpTime.com</p>
