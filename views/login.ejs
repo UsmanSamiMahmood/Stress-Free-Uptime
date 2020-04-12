@@ -14,7 +14,7 @@
    <h2 id="fail"></h2>
   </center>
   <div class="container align-middle">
-    <form>
+    <form method="POST">
         <div class="form-group">
           <label for="exampleInputEmail1">Email address</label>
           <input placeholder="example@e-mail.com" name="email" type="email" class="form-control" id="email" aria-describedby="emailHelp" required>
@@ -29,29 +29,7 @@
         <button type="submit" id="submitButton" class="btn btn-primary">Login</button>
       </form>
     </div>
-    <script>
-      import db from "handler.js"
-      var bcrypt = dcodeIO.bcrypt;
 
-      document.getElementById("submitButton").addEventListener("click", authorize())
-
-      function authorize() {
-      db.collection("users").where("email", "==", document.getElementById("email").value)
-    .get()
-    .then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
-            if (bcrypt(compare(document.getElementById("password").value, doc.data().password))) {
-              return location.replace("/dashboard");            
-            } else {
-              return document.getElementById("fail").innerText = "Fail"
-            }
-        });
-    })
-    .catch(function(error) {
-        console.log("Error getting documents: ", error);
-    });
-  }
-    </script>
     <!-- Footer -->
     <div class="alert footer" role="alert">
       <p>Stress Free Uptime - &copy; StressFreeUpTime.com</p>

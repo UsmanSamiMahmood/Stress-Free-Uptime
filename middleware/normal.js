@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const bcrypt = require("bcrypt");
 const { db } = require("../database/handler");
 let location = db.collection("data").doc("permissionCheck")
     .get().then((doc) => {
@@ -14,6 +15,11 @@ router.get("/", (req, res, next) => {
         return res.send(`Your IP: ${ip} is blacklisted from using our services, have a good day.`)
     } else {
         res.status(200)
+        bcrypt.genSalt(10, (err, salt) => {
+            bcrypt.hash("test", salt, function(err, hash) {
+                console.log(hash)
+            })
+        })
         return res.render("index", {
             "jonasMail": "jonas.tysbjerg@gmail.com",
             "jonasDiscord": "♰ R1zeN#0001",
@@ -44,6 +50,38 @@ router.get("/login", (req, res, next) => {
     } else {
         res.status(200)
         return res.render("login");
+    }
+})
+
+router.post("/login", (req, res, next) => {
+    let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    ip = ip.split("::ffff:")[1]
+    if (blackListedIPs.includes(ip)) {
+        res.status(502)
+        return res.send(`Your IP: ${ip} is blacklisted from using our services, have a good day.`)
+    } else {
+        res.status(200)
+        
+        let citiesRef = db.collection('users');
+        let query = citiesRef.where('email', '==', req.body.email).get()
+        .then(snapshot => {
+            if (snapshot.empty) {
+            return res.send("<h1>This user isn't registered.");
+            }  
+
+            snapshot.forEach(doc => {
+                return bcrypt.compare(req.body.password, doc.data().password, function (err, result) {
+                    if (result) {
+                        res.redirect("http://127.0.0.1/dashboard")
+                    } else {
+                        res.send("<h1>Incorrect e-mail or password.</h1>")
+                    }
+                });
+            });
+        })
+        .catch(err => {
+            console.log('Error getting documents', err);
+        });
     }
 })
 
