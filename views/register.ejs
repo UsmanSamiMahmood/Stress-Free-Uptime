@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SFU - Login</title>
-    <script src="../js/index"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/login.css"> 
     <script src="../js/index.js"></script>
@@ -13,8 +12,8 @@
   <center>
    <h1 class="title">Stress Free Uptime - Register</h1>
   </center>
-  <div class="container align-middle">
-    <form action="/register" method="post">
+  <div id="register" class="container align-middle">
+    <form action="/register" method="post" id="register-form">
         <div class="form-group">
           <label for="exampleInputEmail1">Email address</label>
           <input placeholder="example@e-mail.com" name="email" type="email" class="form-control" id="email" aria-describedby="emailHelp" required>

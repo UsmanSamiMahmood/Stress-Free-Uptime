@@ -111,7 +111,7 @@ router.post("/register", async(req, res, next) => {
         json.title = "Your account has been registered."
         json.message = "Redirecting to login..."
 
-        res.end(JSON.stringify(json))
+        //res.end(JSON.stringify(json))
     }
    
     
