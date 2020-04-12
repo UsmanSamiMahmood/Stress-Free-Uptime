@@ -48,6 +48,8 @@ router.get("/addwebsite", (req, res, next) => {
                         res.status(200).json({
                             error: 'Please supply premium status.'
                         })
+                    } else {
+                        let loc = db.collection('data')
                     }
                 }
             }
