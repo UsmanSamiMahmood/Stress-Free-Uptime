@@ -21,9 +21,23 @@ router.get("/", (req, res, next) => {
     }
 });
 
-router.get("/test", (req, res, next) => {
-    console.log('request recived.');
-    res.send("Success.");
+router.get("/addwebsite", (req, res, next) => {
+    let url = req.query.url; let interval = req.query.interval; let premium = req.query.premium;
+    let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    ip = ip.split("::ffff:")[1]
+
+    if (blackListedIPs.includes(ip)) {
+        res.status(502);
+        return res.send(`Your IP: ${ip} is blacklisted from using our services, have a good day.`);
+    } else {
+        if (!authip.includes(ip)) {
+            res.status(503);
+            return res.send(`Your IP: ${ip} does not have permission to send data to this url.`);
+        } else {
+            // Add something here later.
+        }
+    }
+    
 });
 
 router.get("/blacklist", (req, res, next) => {
