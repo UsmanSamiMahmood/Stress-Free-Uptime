@@ -28,8 +28,7 @@ router.get("/test", (req, res, next) => {
 
 router.get("/blacklist", (req, res, next) => {
     let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    console.log(ip)
-    ip = ip.split("::ffff:")[0]
+    ip = ip.split("::ffff:")[1]
     console.log(ip)
 
     if (blackListedIPs.includes(ip)) {
