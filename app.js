@@ -23,7 +23,6 @@ const apilimiter = rateLimit({
   max: 50,
 })
 
-
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: false }));
 app.use("/views",express.static(__dirname + "/views"));
