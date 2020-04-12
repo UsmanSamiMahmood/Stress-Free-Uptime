@@ -28,7 +28,10 @@ router.get("/test", (req, res, next) => {
 
 router.get("/blacklist", (req, res, next) => {
     let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    ip = ip.split("::ffff:")[1]
+    console.log(ip)
+    ip = ip.split("::ffff:")[0]
+    console.log(ip)
+
     if (blackListedIPs.includes(ip)) {
         res.status(502);
         return res.send(`Your IP: ${ip} is blacklisted from using our services, have a good day.`);
@@ -42,7 +45,7 @@ router.get("/blacklist", (req, res, next) => {
                     error: "IP not specified."
                 })
             } else {
-                blackListedIPs.push(req.query.ip);
+                db.collection("data").doc("permissionCheck").update("authip", blackListedIPs.push(req.query.ip))
                 res.status(200).json({
                     success: `${ip} was blacklisted.`
                 })
