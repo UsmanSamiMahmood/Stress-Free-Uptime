@@ -30,11 +30,9 @@ router.get("/login", (req, res, next) => {
 });
 
 router.post("/login", async(req, res, next) => {
-    const data = req.body;
-
-    if (data.hasOwnProperty("email")) {
-        console.log(data)
-    }
+    console.log(req.body)
+    console.log(req.params)
+    console.log(req.query)
 })
 
 module.exports = router;
