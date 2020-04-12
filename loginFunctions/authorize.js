@@ -12,15 +12,14 @@ function authorize(email, password) {
 
             snapshot.forEach(doc => {
                 bcrypt.compare(password, doc.data().password, function(err, result) {
-                    console.log(typeof result)
-                    return !!result
+                    return true;
                 })
             });
         })
         .catch(err => {
             console.log('Error getting documents', err);
         });
-
+        return false;
 }
 
 console.log(authorize("dawsawd@wadwa.com", "2e1r4wq2rwq1f") == true ? "Correct login" : "Incorrect login")
