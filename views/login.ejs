@@ -6,13 +6,15 @@
     <title>SFU - Login</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/login.css">
+    <script src="../database/handler.js"></script>
 </head>
 <body>
   <center>
    <h1 class="title">Stress Free Uptime - Login</h1>
+   <h2 id="fail"></h2>
   </center>
   <div class="container align-middle">
-    <form action="/login" method="post">
+    <form method="POST">
         <div class="form-group">
           <label for="exampleInputEmail1">Email address</label>
           <input placeholder="example@e-mail.com" name="email" type="email" class="form-control" id="email" aria-describedby="emailHelp" required>
@@ -20,12 +22,34 @@
         </div>
         <div class="form-group">
           <label for="exampleInputPassword1">Password</label>
-          <input placeholder="Your Very Secret Password" name="password" type="password" class="form-control" id="password" required>
+          <input placeholder="Your Very Secret Password" id="password" name="password" type="password" class="form-control" id="password" required>
         </div>
         <p>Not registered yet? <a href="http://127.0.0.1/register">Sign up here</a></p><br>
-        <button type="submit" name="submit" class="btn btn-primary">Login</button>
+        
+        <button type="button" onclick="authorize()" class="btn btn-primary">Login</button>
       </form>
     </div>
+    <script>
+      import db from "handler.js"
+      var bcrypt = dcodeIO.bcrypt;
+
+      function authorize() {
+      db.collection("users").where("email", "==", document.getElementById("email").value)
+    .get()
+    .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+            if (bcrypt(compare(document.getElementById("password").value, doc.data().password))) {
+              return location.replace("http://127.0.0.1/dashboard");            
+            } else {
+              return document.getElementById("fail").innerText = "Fail"
+            }
+        });
+    })
+    .catch(function(error) {
+        console.log("Error getting documents: ", error);
+    });
+  }
+    </script>
     <!-- Footer -->
     <div class="alert footer" role="alert">
       <p>Stress Free Uptime - &copy; StressFreeUpTime.com</p>
