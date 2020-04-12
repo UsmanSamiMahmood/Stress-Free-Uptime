@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const loginFunctions = require("../loginFunctions/authorize");
 const { db } = require("../database/handler");
 let location = db.collection("data").doc("permissionCheck")
     .get().then((doc) => {
@@ -44,7 +43,7 @@ router.get("/login", (req, res, next) => {
         return res.send(`Your IP: ${ip} is blacklisted from using our services, have a good day.`)
     } else {
         res.status(200)
-        return res.render("login", { loginFunctions: loginFunctions });
+        return res.render("login");
     }
 })
 

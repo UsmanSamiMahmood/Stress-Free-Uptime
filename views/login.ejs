@@ -24,7 +24,7 @@
           <label for="exampleInputPassword1">Password</label>
           <input placeholder="Your Very Secret Password" id="password" name="password" type="password" class="form-control" id="password" required>
         </div>
-        <p>Not registered yet? <a href="http://127.0.0.1/register">Sign up here</a></p><br>
+        <p>Not registered yet? <a href="/register">Sign up here</a></p><br>
         
         <button type="button" onclick="authorize()" class="btn btn-primary">Login</button>
       </form>
@@ -39,7 +39,7 @@
     .then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
             if (bcrypt(compare(document.getElementById("password").value, doc.data().password))) {
-              return location.replace("http://127.0.0.1/dashboard");            
+              return location.replace("/dashboard");            
             } else {
               return document.getElementById("fail").innerText = "Fail"
             }
