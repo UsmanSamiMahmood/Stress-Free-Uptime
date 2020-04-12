@@ -4,6 +4,7 @@ const { db } = require("../database/handler");
 let location = db.collection("data").doc("permissionCheck")
     .get().then((doc) => {
         let blackListedIPs = doc.data().blacklistedIPs
+        let authip = doc.data().authip
 
 router.get("/", (req, res, next) => {
     let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
@@ -12,30 +13,40 @@ router.get("/", (req, res, next) => {
         res.status(502)
         return res.send(`Your IP: ${ip} is blacklisted from using our services, have a good day.`)
     } else {
-        res.status(200)
-        return res.render("index")
+        res.status(200).json({
+            message: "Incorrect path specified."
+        })
     }
 })
-router.get("/login", (req, res, next) => {
+
+router.get("/blacklist", (req, res, next) => {
     let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     ip = ip.split("::ffff:")[1]
     if (blackListedIPs.includes(ip)) {
         res.status(502)
         return res.send(`Your IP: ${ip} is blacklisted from using our services, have a good day.`)
     } else {
-        res.status(200)
-        return res.render("login");
+        if (!authip.includes(ip)) {
+            res.status(503)
+            return res.send(`Your IP: ${ip} does not have permission to send data to this url.`)
+        } else {
+            if (!req.query.ip) {
+                res.status(200).json({
+                    error: "IP not specified."
+                })
+            } else {
+                blackListedIPs.push(req.query.ip)
+                    .then(function() {
+                        res.status(200).json({
+                            success: `${req.query.ip} was blacklisted.`,
+                            currentList: `${blackListedIPs}`
+                        })
+                    })
+            }
+        }
     }
-})
+    
+}) 
 });
 
-<<<<<<< HEAD
-router.post("/login", async(req, res, next) => {
-    console.log(req.body)
-    console.log(req.params)
-    console.log(req.query)
-})
-
-=======
->>>>>>> ff33400f45c46290292262b63adac94f663a0bc5
 module.exports = router;

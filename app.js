@@ -7,6 +7,7 @@ const figlet = require("figlet");
 const fs = require("fs");
 const rateLimit = require("express-rate-limit");
 const normalRoute = require("./middleware/normal");
+const apiRoute = require("./middleware/api")
 const bcrypt = require("bcrypt");
 const passport = require("passport");
 const flash = require("express-flash");
@@ -23,6 +24,7 @@ app.set("view engine", "ejs");
 app.use("/views",express.static(__dirname + "/views"));
 app.use("/css",express.static(__dirname + "/css"));
 app.use("/", limiter, normalRoute);
+app.use("/api", limiter, apiRoute)
 
 console.log(figlet.textSync("Stress Free Uptime", {font: 'Ogre'}));
 console.log("\nStress Free Uptime is a service brought to you by Usman Mahmood and Jonas Schiott.");
