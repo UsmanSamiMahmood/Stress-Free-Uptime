@@ -19,7 +19,7 @@ Self-hosting of this service is not supported, nor will there be any support pro
 # Development Team
 Usman Mahmood || Back-End Management
 
-Jonas Schiott || Front-End Management
+Jonas Schiott   || Front-End Management
 
 # Contact
 Discord: MrShadow#0001
