@@ -23,8 +23,6 @@ app.set("view engine", "ejs");
 app.use("/views",express.static(__dirname + "/views"));
 app.use("/css",express.static(__dirname + "/css"));
 app.use("/", limiter, normalRoute);
-app.use(express.bodyParser());
-
 
 console.log(figlet.textSync("Stress Free Uptime", {font: 'Ogre'}));
 console.log("\nStress Free Uptime is a service brought to you by Usman Mahmood and Jonas Schiott.");
