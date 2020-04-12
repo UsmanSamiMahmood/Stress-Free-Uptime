@@ -29,13 +29,10 @@ router.get("/login", (req, res, next) => {
 })
 });
 
-<<<<<<< HEAD
 router.post("/login", async(req, res, next) => {
     console.log(req.body)
     console.log(req.params)
     console.log(req.query)
 })
 
-=======
->>>>>>> ff33400f45c46290292262b63adac94f663a0bc5
 module.exports = router;
