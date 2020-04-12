@@ -23,7 +23,6 @@ const apilimiter = rateLimit({
   max: 50,
 })
 
-
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: false }));
 app.use("/views",express.static(__dirname + "/views"));
@@ -31,10 +30,11 @@ app.use("/css",express.static(__dirname + "/css"));
 app.use("/", apilimiter, normalRoute);
 app.use("/api", limiter, apiRoute);
 
-console.log(figlet.textSync("Stress Free Uptime", {font: 'Ogre'}));
+console.log(figlet.textSync("Stress Free Uptime", {font: 'rectangles'}));
 console.log("\nStress Free Uptime is a service brought to you by Usman Mahmood and Jonas Schiott.");
-console.log("\nPowered by: Node.JS & Express.");
-console.log("Version:", process.env.npm_package_version);
-console.log("Github:", process.env.npm_package_homepage);
+console.log("\nPowered by:", "Node.JS & Express.".blue.bold);
+console.log("Version:", "1.1.2".yellow.bold);
+console.log("Github:", "https://github.com/UsmanSamiMahmood/Automatic-Website-Checker/".magenta.bold);
+console.log("\nDevelopers: Usman Mahmood & Jonas Schiott".underline.red.bold)
 
 module.exports = app;
