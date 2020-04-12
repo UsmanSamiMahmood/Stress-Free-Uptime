@@ -3,22 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="../css/index.css">
+    <title>SFU - Login</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="../css/login.css">
 </head>
 <body>
+  <center>
+   <h1 class="title">Stress Free Uptime - Login</h1>
+  </center>
+  <div class="container align-middle">
     <form action="/login" method="post">
         <div class="form-group">
           <label for="exampleInputEmail1">Email address</label>
-          <input placeholder="your@email.com" name="email" type="email" class="form-control" id="email" aria-describedby="emailHelp" required>
-          <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+          <input placeholder="example@e-mail.com" name="email" type="email" class="form-control" id="email" aria-describedby="emailHelp" required>
+         <p><small id="emailHelp" class="form-text white">We'll never share your email with anyone else.</small></p>
         </div>
         <div class="form-group">
           <label for="exampleInputPassword1">Password</label>
-          <input placeholder="Secret Password" name="password" type="password" class="form-control" id="password" required>
+          <input placeholder="Your Very Secret Password" name="password" type="password" class="form-control" id="password" required>
         </div>
+        <p>Not registered yet? <a href="http://127.0.0.1/register">Sign up here</a></p><br>
         <button type="submit" name="submit" class="btn btn-primary">Login</button>
       </form>
+    </div>
+    <!-- Footer -->
+    <div class="alert footer" role="alert">
+      <p>Stress Free Uptime - &copy; StressFreeUpTime.com</p>
+  </div>
+
 </body>
 </html>

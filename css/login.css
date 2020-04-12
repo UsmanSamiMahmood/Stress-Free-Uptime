@@ -1,0 +1,73 @@
+body {
+    background: linear-gradient(rgb(3, 26, 56), rgb(5, 121, 253));
+    background-repeat: space;
+    background-size: cover;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.title {
+    color: white;
+}
+
+.container {
+    margin-top: 200px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    opacity: 80%;
+    width: 500px;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+}
+    /*
+    * TODO: Make line around!
+    */
+.form {
+    outline-style: groove;
+    outline-color: white;
+}
+
+.container small .white {
+    color: white;
+}
+
+.container label {
+    color: white;
+    font-weight: bold;
+}
+
+.container input {
+    background-color: transparent;
+    color: white;
+}
+
+.container p {
+    color: white;
+}
+
+.container a {
+    color: plum;
+}
+
+/* Footer */
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    height: 50px;
+    background-color: rgb(3, 80, 124);
+    color: white;
+    text-align: center;
+  }
+
+.footer p {
+    padding-top: 15px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
