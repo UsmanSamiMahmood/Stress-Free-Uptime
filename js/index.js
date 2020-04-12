@@ -1,6 +1,14 @@
-function temp(body) {
-    var json = JSON.parse(body)
-    swal(json.title, json.message, json.type);
+window.onload=function(){
+
+    const form = document.querySelector("#register-form")
+
+    form.addEventListener('submit', evt => {
+        evt.preventDefault();
+
+        let email = document.getElementById("email");
+        let password = document.getElementById("password")
+    })
 }
 
-document.getElementById("buttonreg").addEventListener("click", temp)
+
+
