@@ -34,7 +34,25 @@ router.get("/addwebsite", (req, res, next) => {
             res.status(503);
             return res.send(`Your IP: ${ip} does not have permission to send data to this url.`);
         } else {
-            // Add something here later.
+            if (!url) {
+                res.status(200).json({
+                    error: 'Please supply a url.'
+                })
+            } else {
+                if (!url) {
+                    res.status(200).json({
+                        error: 'Please supply an interval.'
+                    })
+                } else {
+                    if (!premium) {
+                        res.status(200).json({
+                            error: 'Please supply premium status.'
+                        })
+                    } else {
+                        let loc = db.collection('data')
+                    }
+                }
+            }
         }
     }
     

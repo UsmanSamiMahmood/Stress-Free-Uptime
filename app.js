@@ -23,13 +23,13 @@ const apilimiter = rateLimit({
   max: 50,
 })
 
-//const isBlacklisted = array.includes(ip) ? true : false
 
 app.set("view engine", "ejs");
+app.use(express.urlencoded({ extended: false }));
 app.use("/views",express.static(__dirname + "/views"));
 app.use("/css",express.static(__dirname + "/css"));
-app.use("/api", limiter, apiRoute)
 app.use("/", apilimiter, normalRoute);
+app.use("/api", limiter, apiRoute)
 
 console.log(figlet.textSync("Stress Free Uptime", {font: 'Ogre'}));
 console.log("\nStress Free Uptime is a service brought to you by Usman Mahmood and Jonas Schiott.");
