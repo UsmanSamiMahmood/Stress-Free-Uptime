@@ -21,7 +21,11 @@ body {
     font-weight: bold;
 }
 
-.textBox
+.textBox {
+    width: 125px;
+    height: 95;
+    background-color: blue;
+}
 /* Footer */
 .footer {
     position: fixed;
