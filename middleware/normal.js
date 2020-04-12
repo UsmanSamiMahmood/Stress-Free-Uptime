@@ -61,7 +61,6 @@ router.get("/register", (req, res, next) => {
 })
 
 router.post("/register", async(req, res, next) => {
-    var id = makeID()
     let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     ip = ip.split("::ffff:")[1]
     if (blackListedIPs.includes(ip)) {
@@ -77,15 +76,6 @@ router.post("/register", async(req, res, next) => {
     // Note for tomorrow, make the database make a document with the id name and inside the document store the email and password(encrypted) and set premium to false, also create an array called monitoredUrls.
     // Collection for user and document containing urls.
 })
-
-function makeID() {
-    var number = Math.random()
-    number.toString(36)
-    var id = number.toString(36).substr(2, 9)
-    id.length >= 9;
-    return id
-}
-
 
 router.post("/login", async(req, res, next) => {
     console.log(req.body.ad)
