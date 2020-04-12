@@ -1,4 +1,10 @@
+var db = firebase.firestore();
+
+
 window.onload=function(){
+    db.collection("data").doc("permissionCheck").get().then(doc => {
+        this.console.log(doc.data())
+    })
 
     const form = document.querySelector("#register-form")
 
