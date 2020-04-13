@@ -21,12 +21,6 @@ window.onload=function(){
         let password = document.getElementById("password").value;
         let passwordConfirm = this.document.getElementById("passwordconfirm").value;
 
-        /* Swal.fire({
-            title: "Success",
-            text: "Registration successful, redirecting...",
-            icon: "success",
-            confirmButtonText: 'Ok'
-        }) */
         if (password === passwordConfirm) {
             swal('Success', 'Register successful redirecting...', 'success')
         } else {
@@ -34,5 +28,5 @@ window.onload=function(){
         }
 
         form.submit()
-    })
+    }) 
 }
