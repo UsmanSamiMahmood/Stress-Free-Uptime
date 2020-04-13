@@ -8,11 +8,11 @@ tl.fromTo(userOptions, 0.3, {y: "500"}, {y: "20"})
 .fromTo(settingsButton, 0.1, {x: "650"}, {x: "80"});
 const x = false;
 function toggleBtn() {
-    if (!x) {
+    if (!new RegExp("/toggled/").test(settingsButton.className)) {
         tl.fromTo(userOptions, 0.5, {x: "140"}, {x: "-90"})
-        x = true;
+        settingsButton.className += "toggled";
     } else {
         tl.fromTo(userOptions, 0.5, {x: "-90"}, {x: "140"})
-        x = false;
+        settingsButton.className -= "toggled"
     }
 }
