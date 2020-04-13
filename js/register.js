@@ -15,18 +15,15 @@ window.onload=function(){
         let password = document.getElementById("password");
         let passwordConfirm = this.document.getElementById("passwordconfirm");
 
-        console.log(`${email} is email and ${password} is password.`)
-        console.log(password.value, passwordConfirm.value)
-
         /* Swal.fire({
             title: "Success",
             text: "Registration successful, redirecting...",
             icon: "success",
             confirmButtonText: 'Ok'
         }) */
-       // if (password.value === passwordConfirm.value) {
+        if (password.value === passwordConfirm.value) {
             swal('Success', 'Register successful redirecting...', 'success')
-       /* } else {
+        } else {
             swal("Error", "Passwords are not matching!", "error")
         }
 
