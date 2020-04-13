@@ -171,7 +171,34 @@ router.post("/login", async(req, res, next) => {
     console.log(req.params)
     console.log(req.query)
 })
-
+function sendMail(email, subject, body, html="") {
+    var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'stressfreeuptime@gmail.com',
+          pass: emailPassword
+        },
+        tls: {
+            rejectUnauthorized: false
+        }
+      });
+      
+      var mailOptions = {
+        from: 'stressfreeuptime@gmail.com',
+        to: email,
+        subject: subject,
+        text: body,
+        html: html
+      };
+      
+      transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+    })
+}
 });
 
 module.exports = router;
