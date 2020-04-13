@@ -19,7 +19,6 @@ window.onload=function(){
                 success: function(body) {
                     var json = JSON.parse(body);
                     swal(json.title, json.message, json.type);
-                    window.location.replace('/login')
                 },
 
                 error: function(body) {
