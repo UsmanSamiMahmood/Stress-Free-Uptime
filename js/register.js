@@ -26,5 +26,7 @@ window.onload=function(){
                     swal(json.title, json.message, json.type);
                 }
         })
+
+        
     }) 
 }
