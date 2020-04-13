@@ -8,12 +8,6 @@ window.onload=function(){
         let password = document.getElementById("password").value;
         let passwordConfirm = this.document.getElementById("passwordconfirm").value;
 
-        /* if (password === passwordConfirm) {
-            swal('Success', 'Register successful redirecting...', 'success')
-        } else {
-            swal("Error", "Passwords are not matching!", "error")
-        } */
-
         $.ajax({
             method: "POST",
             url: "/register",
