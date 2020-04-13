@@ -15,11 +15,7 @@ router.get("/", (req, res, next) => {
         return res.send(`Your IP: ${ip} is blacklisted from using our services, have a good day.`)
     } else {
         res.status(200)
-        bcrypt.genSalt(10, (err, salt) => {
-            bcrypt.hash("test", salt, function(err, hash) {
-                console.log(hash)
-            })
-        })
+        
         return res.render("index", {
             "jonasMail": "jonas.tysbjerg@gmail.com",
             "jonasDiscord": "♰ R1zeN#0001",
