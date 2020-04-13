@@ -130,14 +130,7 @@ router.post("/register", async(req, res, next) => {
         
         return res.end(JSON.stringify(json))
         }  
-})
-
-router.post("/login", async(req, res, next) => {
-    console.log(req.body.ad)
-    console.log(req.params)
-    console.log(req.query)
-})
-
+});
 });
 
 module.exports = router;
