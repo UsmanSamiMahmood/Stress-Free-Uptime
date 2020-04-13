@@ -100,21 +100,49 @@ router.post("/register", async(req, res, next) => {
         res.status(502); 
         return res.send(`Your IP: ${ip} does not have permission to send data to this url.`)
     } else {
-        let email = req.query.email
-        let password = req.query.password
-        var json = {}
-        json.type = "success"
-        json.title = "Your account has been registered."
-        json.message = "Redirecting to login......!"
+        let email = req.body.email
+        let password = req.body.password
+        let confirmPassword = req.body.confirmpassword;
+
+        let citiesRef = db.collection('users');
+        let query = citiesRef.where('email', '==', email).get()
+            .then(snapshot => {
+                if (!snapshot.empty) {
+                    throw "found"
+                }
+
+                var json = {}
+                json.type = "success"
+                json.title = "Your account has been registered."
+                json.message = "Redirecting to login......!"
+        
+            })
+            .catch(err => {
+                if (err === "found") {
+                    var json = {}
+                    json.type = "error"
+                    json.title = "Account Exists."
+                    json.message = "A user with this email already exists."
+                    return res.end(JSON.stringify(json))
+                } else if (password !== confirmPassword) {
+                    var json = {}
+                    json.type = "error"
+                    json.title = "Passwords do not match."
+                    json.message = "Please make sure passwords match before submitting."
+                    return res.end(JSON.stringify(json))
+                } else {
+                    var json = {}
+                    json.type = "success"
+                    json.title = "Your account has been registered."
+                    json.message = "Redirecting to login......!"
+                    return res.end(JSON.stringify(json))
+                }
+            })
 
         console.log(`Email: ${req.body.email}. Password: ${req.body.password}.`)
         
         return res.end(JSON.stringify(json))
-    }
-   
-    
-    // Note for tomorrow, make the database make a document with the id name and inside the document store the email and password(encrypted) and set premium to false, also create an array called monitoredUrls.
-    // Collection for user and document containing urls.
+        }  
 })
 
 router.post("/login", async(req, res, next) => {
