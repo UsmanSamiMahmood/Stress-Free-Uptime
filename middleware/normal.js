@@ -54,15 +54,28 @@ router.post("/login", (req, res, next) => {
     ip = ip.split("::ffff:")[1]
     if (blackListedIPs.includes(ip)) {
         res.status(502)
-        return res.send(`Your IP: ${ip} is blacklisted from using our services, have a good day.`)
+        var json = {}
+        json.type = "error"
+        json.title = "Error Encountered"
+        json.message = `Your IP: ${ip} is blacklisted from using our services.`
+        json.success = false
+
+        return res.send(JSON.stringify(json))
+
+        //return res.send(`Your IP: ${ip} is blacklisted from using our services, have a good day.`)
     } else {
         res.status(200)
-        
         let citiesRef = db.collection('users');
         let query = citiesRef.where('email', '==', req.body.email).get()
         .then(snapshot => {
             if (snapshot.empty) {
-            return res.send("<h1>This user isn't registered.");
+                var json = {}
+                json.type = "error"
+                json.title = "Error Encountered"
+                json.message = "This user isn't registered."
+                json.success = false
+
+                return res.send(JSON.stringify(json))
             }  
 
             snapshot.forEach(doc => {
@@ -70,7 +83,13 @@ router.post("/login", (req, res, next) => {
                     if (result) {
                         res.redirect("/dashboard")
                     } else {
-                        res.send("<h1>Incorrect e-mail or password.</h1>")
+                        var json = {}
+                        json.type = "error"
+                        json.title = "Error Encountered"
+                        json.message = "Incorrect email or password."
+                        json.success = false
+
+                        return res.send(JSON.stringify(json))
                     }
                 });
             });
@@ -114,7 +133,7 @@ router.post("/register", async(req, res, next) => {
                     json.type = "error"
                     json.title = "Account Exists."
                     json.message = "A user with this email already exists."
-                    json.success = false;
+                    json.success = false
 
                     return res.send(JSON.stringify(json))
             })
@@ -123,7 +142,7 @@ router.post("/register", async(req, res, next) => {
             json.type = "error"
             json.title = "Passwords do not match."
             json.message = "Please make sure passwords match before submitting."
-            json.success = false;
+            json.success = false
 
             return res.send(JSON.stringify(json))
         } else {
@@ -141,7 +160,7 @@ router.post("/register", async(req, res, next) => {
             json.type = "success";
             json.title = "Your account has been registered.";
             json.message = "Redirecting to login...";
-            json.success = true;
+            json.success = true
 
             bcrypt.genSalt(10, function(err, salt) {
                 bcrypt.hash(req.body.password, salt, function(err, hash) {
@@ -166,11 +185,6 @@ router.post("/register", async(req, res, next) => {
     // Collection for user and document containing urls.
 })
 
-router.post("/login", async(req, res, next) => {
-    console.log(req.body.ad)
-    console.log(req.params)
-    console.log(req.query)
-})
 function sendMail(email, subject, body, html="") {
     var transporter = nodemailer.createTransport({
         service: 'gmail',
