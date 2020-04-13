@@ -96,13 +96,13 @@ router.get("/register", (req, res, next) => {
 router.post("/register", async(req, res, next) => {
     let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     ip = ip.split("::ffff:")[1]
-    if (blackListedIPs.includes(ip)) {
+    if (!authip.includes(ip)) {
         res.status(502); 
         return res.send(`Your IP: ${ip} does not have permission to send data to this url.`)
     } else {
         let email = req.query.email
         let password = req.query.password
-        
+
         var json = {}
         json.type = "success"
         json.title = "Your account has been registered."
