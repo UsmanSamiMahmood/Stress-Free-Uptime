@@ -103,41 +103,29 @@ router.post("/register", async(req, res, next) => {
         let email = req.body.email
         let password = req.body.password
         let confirmPassword = req.body.confirmpassword;
+        var json = {}
 
         let citiesRef = db.collection('users');
         let query = citiesRef.where('email', '==', email).get()
             .then(snapshot => {
                 if (!snapshot.empty) {
                     throw "found"
-                }
-
-                var json = {}
-                json.type = "success"
-                json.title = "Your account has been registered."
-                json.message = "Redirecting to login......!"
-        
+                }        
             })
             .catch(err => {
-                if (err === "found") {
-                    var json = {}
                     json.type = "error"
                     json.title = "Account Exists."
                     json.message = "A user with this email already exists."
-                    return res.end(JSON.stringify(json))
-                } else if (password !== confirmPassword) {
-                    var json = {}
-                    json.type = "error"
-                    json.title = "Passwords do not match."
-                    json.message = "Please make sure passwords match before submitting."
-                    return res.end(JSON.stringify(json))
-                } else {
-                    var json = {}
-                    json.type = "success"
-                    json.title = "Your account has been registered."
-                    json.message = "Redirecting to login......!"
-                    return res.end(JSON.stringify(json))
-                }
             })
+            if (password !== confirmPassword) {
+                json.type = "error"
+                json.title = "Passwords do not match."
+                json.message = "Please make sure passwords match before submitting."
+            } else {
+                json.type = "success"
+                json.title = "Your account has been registered."
+                json.message = "Redirecting to login......!"
+            }
         console.log(`Email: ${req.body.email}. Password: ${req.body.password}.`)
         
         return res.end(JSON.stringify(json))
