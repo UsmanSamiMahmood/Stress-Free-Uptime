@@ -96,9 +96,9 @@ router.get("/register", (req, res, next) => {
 router.post("/register", async(req, res, next) => {
     let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     ip = ip.split("::ffff:")[1]
-    if (!authip.includes(ip)) {
+    if (blackListedIPs.includes(ip)) {
         res.status(502); 
-        return res.send(`Your IP: ${ip} does not have permission to send data to this url.`)
+        return res.send(`Your IP: ${ip} is blacklisted from using our services, have a good day.`)
     } else {
         let citiesRef = db.collection('users');
         let query = await citiesRef.where('email', '==', req.body.email).get()
@@ -114,6 +114,7 @@ router.post("/register", async(req, res, next) => {
                     json.type = "error"
                     json.title = "Account Exists."
                     json.message = "A user with this email already exists."
+                    json.success = false;
 
                     return res.send(JSON.stringify(json))
             })
@@ -122,16 +123,36 @@ router.post("/register", async(req, res, next) => {
             json.type = "error"
             json.title = "Passwords do not match."
             json.message = "Please make sure passwords match before submitting."
+            json.success = false;
 
             return res.send(JSON.stringify(json))
         } else {
             let email = req.query.email
             let password = req.query.password
+            var number = Math.random()
+            number.toString(36)
+            var id = number.toString(36).substr(2, 9)
+            id.length >= 9;
+
+            console.log(id);
+            
 
             var json = {}
-            json.type = "success"
-            json.title = "Your account has been registered."
-            json.message = "Redirecting to login......!"
+            json.type = "success";
+            json.title = "Your account has been registered.";
+            json.message = "Redirecting to login......!";
+            json.success = true;
+
+            bcrypt.genSalt(10, function(err, salt) {
+                bcrypt.hash(req.body.password, salt, function(err, hash) {
+                    db.collection("users").doc(id).set({
+                        email: req.body.email,
+                        password: hash,
+                        admin: false,
+                        premium: false
+                    })
+                });
+            });
 
             console.log(`Email: ${req.body.email}. Password: ${req.body.password}.`)
         

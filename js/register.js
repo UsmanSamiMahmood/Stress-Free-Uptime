@@ -19,6 +19,11 @@ window.onload=function(){
                 success: function(body) {
                     var json = JSON.parse(body);
                     swal(json.title, json.message, json.type);
+                    if (json.success) {
+                        setTimeout(() => {
+                            location.replace("/login")
+                        }, 3000);
+                    }
                 },
 
                 error: function(body) {
