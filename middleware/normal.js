@@ -15,7 +15,7 @@ router.get("/", (req, res, next) => {
         return res.send(`Your IP: ${ip} is blacklisted from using our services, have a good day.`)
     } else {
         res.status(200)
-        
+
         return res.render("index", {
             "jonasMail": "jonas.tysbjerg@gmail.com",
             "jonasDiscord": "♰ R1zeN#0001",
