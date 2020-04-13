@@ -68,7 +68,7 @@ router.post("/login", (req, res, next) => {
             snapshot.forEach(doc => {
                 return bcrypt.compare(req.body.password, doc.data().password, function (err, result) {
                     if (result) {
-                        res.redirect("http://127.0.0.1/dashboard")
+                        res.redirect("/dashboard")
                     } else {
                         res.send("<h1>Incorrect e-mail or password.</h1>")
                     }
