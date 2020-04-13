@@ -1,3 +1,5 @@
+const database = firebase.database()
+
 window.onload=function(){
      /* db.collection("data").doc("permissionCheck").get().then(doc => {
         this.console.log(doc.data())
@@ -8,8 +10,12 @@ window.onload=function(){
     form.addEventListener('submit', evt => {
         evt.preventDefault();
 
+        userId = "test"
         /* var firebaseRef = firebase.database().ref();
         firebaseRef.child("Text").set("Test") */
+        database.ref("/users/" + userId).set({
+            firstname: "hello"
+        })
 
         let email = document.getElementById("email");
         let password = document.getElementById("password");
