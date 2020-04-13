@@ -102,6 +102,7 @@ router.post("/register", async(req, res, next) => {
     } else {
         let email = req.query.email
         let password = req.query.password
+        
         var json = {}
         json.type = "success"
         json.title = "Your account has been registered."
