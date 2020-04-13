@@ -140,7 +140,7 @@ router.post("/register", async(req, res, next) => {
             var json = {}
             json.type = "success";
             json.title = "Your account has been registered.";
-            json.message = "Redirecting to login......!";
+            json.message = "Redirecting to login...";
             json.success = true;
 
             bcrypt.genSalt(10, function(err, salt) {
