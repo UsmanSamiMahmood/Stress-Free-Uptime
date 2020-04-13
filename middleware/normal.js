@@ -105,13 +105,11 @@ router.post("/register", async(req, res, next) => {
         var json = {}
         json.type = "success"
         json.title = "Your account has been registered."
-        json.message = "Redirecting to login..."
-        
-        res.render('register')
-        //res.status(200)
-        //res.end()
+        json.message = "Redirecting to login......!"
 
-        //res.end(JSON.stringify(json))
+        console.log(`Email: ${req.body.email}. Password: ${req.body.password}.`)
+        
+        return res.end(JSON.stringify(json))
     }
    
     
