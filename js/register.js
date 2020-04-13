@@ -19,14 +19,18 @@ window.onload=function(){
             url: "/register",
             data: {
                 email: email,
-                password: password
+                password: password,
+                passwordconfirm: passwordConfirm,
             },
                 success: function(body) {
                     var json = JSON.parse(body);
                     swal(json.title, json.message, json.type);
+                    window.location.replace('/login')
+                },
+
+                error: function(body) {
+                    swal("Error Occured", "Failed to connect to back-end server.", "error")
                 }
         })
-
-        
     }) 
 }
