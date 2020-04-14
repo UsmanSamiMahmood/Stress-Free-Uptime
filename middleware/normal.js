@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 const { db } = require("../database/handler");
+const { SESSION_NAME } = require("../app.js")
 
 const redirectToLogin = (req, res, next) => {
     if (!req.session.userID) {
