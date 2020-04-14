@@ -58,7 +58,7 @@ app.use("/api", apilimiter, apiRoute);
 console.log(figlet.textSync("Stress Free Uptime", {font: 'rectangles'}));
 console.log("\nStress Free Uptime is a service brought to you by Usman Mahmood and Jonas Schiott.");
 console.log("\nPowered by:", "Node.JS & Express.".blue.bold);
-console.log("Version:", "1.1.5".yellow.bold);
+console.log("Version:", "1.1.7".yellow.bold);
 console.log("Github:", "https://github.com/UsmanSamiMahmood/Automatic-Website-Checker/".magenta.bold);
 console.log("\nDevelopers: Usman Mahmood & Jonas Schiott".underline.red.bold)
 

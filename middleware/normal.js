@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 const { db } = require("../database/handler");
+const nodemailer = require('nodemailer');
+const { emailPassword } = require("../secrets/config.json");
 const { SESSION_NAME } = require("../app.js")
 
 const redirectToLogin = (req, res, next) => {
@@ -172,8 +174,8 @@ router.post("/register", redirectToDashboard, async(req, res, next) => {
 
             return res.send(JSON.stringify(json))
         } else {
-            let email = req.query.email
-            let password = req.query.password
+            let email = req.body.email
+            let password = req.body.password
             var number = Math.random()
             number.toString(36)
             var id = number.toString(36).substr(2, 9)
@@ -191,7 +193,7 @@ router.post("/register", redirectToDashboard, async(req, res, next) => {
             bcrypt.genSalt(10, function(err, salt) {
                 bcrypt.hash(req.body.password, salt, function(err, hash) {
                     db.collection("users").doc(id).set({
-                        email: req.body.email,
+                        email: email,
                         password: hash,
                         admin: false,
                         premium: false,
@@ -199,6 +201,8 @@ router.post("/register", redirectToDashboard, async(req, res, next) => {
                     })
                 });
             });
+
+            sendMail(email, "Welcome to Stress Free Uptime", "whalecum mens")
 
             console.log(`Email: ${req.body.email}. Password: ${req.body.password}.`)
         
@@ -237,7 +241,7 @@ function sendMail(email, subject, body, html="") {
       });
       
       var mailOptions = {
-        from: 'stressfreeuptime@gmail.com',
+        from: '(Robot) stressfreeuptime@gmail.com',
         to: email,
         subject: subject,
         text: body,
