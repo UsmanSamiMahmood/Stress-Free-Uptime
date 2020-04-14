@@ -212,6 +212,14 @@ router.post("/register", redirectToDashboard, async(req, res, next) => {
 })
 
 router.post("/logout", redirectToLogin, (req, res, next) => {
+    req.session.destroy(err => {
+        if (err) {
+            return res.redirect('/dashboard')
+        }
+
+        res.clearCookie(SESSION_NAME)
+        res.redirect("/login")
+    })
 
 })
 
