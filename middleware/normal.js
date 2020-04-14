@@ -217,3 +217,9 @@ function sendMail(email, subject, body, html="") {
 });
 
 module.exports = router;
+
+const users = [
+    { id: 1, name: 'Alex', email: 'alex@gmail.com', password: 'secret', premium: false, admin: false },
+    { id: 2, name: 'Usman', email: 'usman@gmail.com', password: 'secret', premium: false, admin: false },
+    { id: 3, name: 'Jonas', email: 'jonas@gmail.com', password: 'secret', premium: false, admin: false, },
+  ]
