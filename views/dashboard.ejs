@@ -8,10 +8,11 @@
     <link rel="stylesheet" href="../css/dashboard.css">
 </head>
 <body>
-    <nav>
-        <button id="usrOpt">User Options</button>
-        <img onclick="toggleBtn()" class="settingsBtn" src="https://img.icons8.com/cotton/64/000000/settings--v1.png"/>
-    </nav>
+  <nav>
+    <form action="/logout" method="POST">
+      <button type="submit" class="btn btn-danger" id="logoutButton">Logout</button>
+    </form>
+  </nav>
 
     <div class="container"></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/TweenMax.min.js" integrity="sha256-lPE3wjN2a7ABWHbGz7+MKBJaykyzqCbU96BJWjio86U=" crossorigin="anonymous"></script>
