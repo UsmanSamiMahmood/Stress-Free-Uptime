@@ -1,24 +1,12 @@
 body {
-    padding: 0;
-    margin: 0;
-    background: gray;
+    background: rgba(95, 114, 129, 0.712);
     height: 100vh;
     clear: both;
     overflow: hidden;
 }
 
-.settingsBtn {
-    right: 0;
-    top: 15em;
-    float: right;
-}
-
-.settingsBtn:hover {
-    cursor: pointer;
-}
-
-#usrOpt {
-    right: 0;
+.logoutButton {
+    right: 7px;
     top: 7px;
     float: right;
 }
