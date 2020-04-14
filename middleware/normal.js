@@ -2,6 +2,23 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 const { db } = require("../database/handler");
+
+const redirectToLogin = (req, res, next) => {
+    if (!req.session.userID) {
+      res.redirect("/login")
+    } else {
+      next()
+    }
+}
+
+const redirectToDashboard = (req, res, next) => {
+    if (req.session.userID) {
+      res.redirect("/dashboard")
+    } else {
+      next()
+    }
+}
+
 let location = db.collection("data").doc("permissionCheck")
     .get().then((doc) => {
         let blackListedIPs = doc.data().blacklistedIPs
@@ -26,7 +43,8 @@ router.get("/", (req, res, next) => {
     }
 })
 
-router.get("/dashboard", (req, res, next) => {
+router.get("/dashboard", redirectToLogin, (req, res, next) => {
+    console.log(req.session)
     let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     ip = ip.split("::ffff:")[1]
     if (blackListedIPs.includes(ip)) {
@@ -38,7 +56,7 @@ router.get("/dashboard", (req, res, next) => {
     }
 })
 
-router.get("/login", (req, res, next) => {
+router.get("/login", redirectToDashboard, (req, res, next) => {
     let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     ip = ip.split("::ffff:")[1]
     if (blackListedIPs.includes(ip)) {
@@ -50,7 +68,7 @@ router.get("/login", (req, res, next) => {
     }
 })
 
-router.post("/login", (req, res, next) => {
+router.post("/login", redirectToDashboard, (req, res, next) => {
     let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     ip = ip.split("::ffff:")[1]
     if (blackListedIPs.includes(ip)) {
@@ -63,7 +81,6 @@ router.post("/login", (req, res, next) => {
 
         return res.send(JSON.stringify(json))
 
-        //return res.send(`Your IP: ${ip} is blacklisted from using our services, have a good day.`)
     } else {
         res.status(200)
         let citiesRef = db.collection('users');
@@ -82,7 +99,14 @@ router.post("/login", (req, res, next) => {
             snapshot.forEach(doc => {
                 return bcrypt.compare(req.body.password, doc.data().password, function (err, result) {
                     if (result) {
-                        res.redirect("/dashboard")
+                        req.session.userID = doc.data().id
+                        var json = {}
+                        json.type = "success";
+                        json.title = "Successfully logged in.";
+                        json.message = "Redirecting to dashboard...";
+                        json.success = true
+
+                        return res.send(JSON.stringify(json))
                     } else {
                         var json = {}
                         json.type = "error"
@@ -96,12 +120,12 @@ router.post("/login", (req, res, next) => {
             });
         })
         .catch(err => {
-            console.log('Error getting documents', err);
+            console.log('Error getting documents.', err);
         });
     }
 })
 
-router.get("/register", (req, res, next) => {
+router.get("/register", redirectToDashboard, (req, res, next) => {
     let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     ip = ip.split("::ffff:")[1]
     if (blackListedIPs.includes(ip)) {
@@ -113,7 +137,7 @@ router.get("/register", (req, res, next) => {
     }
 })
 
-router.post("/register", async(req, res, next) => {
+router.post("/register", redirectToDashboard, async(req, res, next) => {
     let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     ip = ip.split("::ffff:")[1]
     if (blackListedIPs.includes(ip)) {
@@ -169,7 +193,8 @@ router.post("/register", async(req, res, next) => {
                         email: req.body.email,
                         password: hash,
                         admin: false,
-                        premium: false
+                        premium: false,
+                        id: id
                     })
                 });
             });
@@ -184,6 +209,10 @@ router.post("/register", async(req, res, next) => {
     
     // Note for tomorrow, make the database make a document with the id name and inside the document store the email and password(encrypted) and set premium to false, also create an array called monitoredUrls.
     // Collection for user and document containing urls.
+})
+
+router.post("/logout", redirectToLogin, (req, res, next) => {
+
 })
 
 function sendMail(email, subject, body, html="") {
@@ -217,9 +246,3 @@ function sendMail(email, subject, body, html="") {
 });
 
 module.exports = router;
-
-const users = [
-    { id: 1, name: 'Alex', email: 'alex@gmail.com', password: 'secret', premium: false, admin: false },
-    { id: 2, name: 'Usman', email: 'usman@gmail.com', password: 'secret', premium: false, admin: false },
-    { id: 3, name: 'Jonas', email: 'jonas@gmail.com', password: 'secret', premium: false, admin: false, },
-  ]
