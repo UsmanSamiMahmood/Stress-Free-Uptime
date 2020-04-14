@@ -9,10 +9,18 @@ const rateLimit = require("express-rate-limit");
 const normalRoute = require("./middleware/normal");
 const apiRoute = require("./middleware/api")
 const bcrypt = require("bcrypt");
-const passport = require("passport");
-const flash = require("express-flash");
 const session = require("express-session");
-const methodOverride = require("method-override");
+const time = 1000 * 60 * 60 * 2
+const { db } = require("./database/handler.js");
+
+const {
+  SESSION_LIFETIME = time,
+  SESSION_NAME = "sid",
+  SESSION_SECRET = "5etfrhsdjkfh5fsdfkj",
+  NODE_ENV = "development"
+} = process.env
+
+const IN_PRODUCTION = NODE_ENV === 'production'
 
 const limiter = rateLimit({
   windowMs: 900000,
@@ -24,7 +32,22 @@ const apilimiter = rateLimit({
   max: 50,
 })
 
+const users = "add data later."
+
 app.set("view engine", "ejs");
+
+app.use(session({
+  name: SESSION_NAME,
+  resave: false,
+  saveUninitialized: false,
+  secret: SESSION_SECRET,
+  cookie: {
+    maxAge: SESSION_LIFETIME,
+    sameSite: true,
+    secure: IN_PRODUCTION,
+  }
+}))
+
 app.use(express.urlencoded({ extended: false }));
 app.use("/views",express.static(__dirname + "/views"));
 app.use("/css",express.static(__dirname + "/css"));

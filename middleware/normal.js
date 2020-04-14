@@ -8,6 +8,7 @@ let location = db.collection("data").doc("permissionCheck")
         let authip = doc.data().authip
     
 router.get("/", (req, res, next) => {
+    console.log(req.session)
     let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     ip = ip.split("::ffff:")[1]
     if (blackListedIPs.includes(ip)) {
