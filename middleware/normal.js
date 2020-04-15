@@ -4,7 +4,8 @@ const bcrypt = require("bcrypt");
 const { db } = require("../database/handler");
 const nodemailer = require('nodemailer');
 const { emailPassword } = require("../secrets/config.json");
-const { SESSION_NAME } = require("../app.js")
+const { SESSION_NAME } = require("../app.js");
+const emailTemplates = require("../emailTemplates.json");
 
 const redirectToLogin = (req, res, next) => {
     if (!req.session.userID) {
@@ -200,12 +201,13 @@ router.post("/register", redirectToDashboard, async(req, res, next) => {
                         password: hash,
                         admin: false,
                         premium: false,
-                        id: id
+                        id: id,
+                        websites: 0
                     })
                 });
             });
 
-            sendMail(email, "Welcome to Stress Free Uptime", "whalecum mens")
+            sendMail(email, "Welcome to Stress Free Uptime", "",)
 
             console.log(`Email: ${req.body.email}. Password: ${req.body.password}.`)
         

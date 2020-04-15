@@ -15,7 +15,17 @@
   </center>
   <div id="register" class="container align-middle">
     <form action="/register" method="post" id="register-form">
+      <form class="form-inline">
         <div class="form-group">
+          <label for="email">Email address:</label>
+          <input type="email" class="form-control" id="email">
+        </div>
+        <div class="form-group">
+          <label for="pwd">Password:</label>
+          <input type="password" class="form-control" id="pwd">
+        </div>
+      </form>
+      <div class="form-group">
           <label for="exampleInputEmail1">Email address</label>
           <input placeholder="example@e-mail.com" name="email" type="email" class="form-control" id="email" aria-describedby="emailHelp" required>
          <p><small id="emailHelp" class="form-text white">We'll never share your email with anyone else.</small></p>
