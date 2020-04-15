@@ -65,7 +65,9 @@ router.get("/dashboard", redirectToLogin, (req, res, next) => {
         return res.send(`Your IP: ${ip} is blacklisted from using our services, have a good day.`)
     } else {
         res.status(200)
-        return res.render("dashboard")
+        return res.render("dashboard", {
+            userAdmin: req.session.admin
+        })
     }
 })
 
@@ -114,6 +116,8 @@ router.post("/login", redirectToDashboard, (req, res, next) => {
                     if (result) {
                         req.session.admin = doc.data().admin
                         req.session.userID = doc.data().id
+                        req.session.isPremium = doc.data().premium
+                        req.session.isVerified = doc.data().emailVerified
                         var json = {}
                         json.type = "success";
                         json.title = "Successfully logged in.";
@@ -154,7 +158,7 @@ router.get("/register", redirectToDashboard, (req, res, next) => {
 router.post("/register", redirectToDashboard, async(req, res, next) => {
     let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     ip = ip.split("::ffff:")[1]
-    if (blackListedIPs.includes(ip)) {
+    if (blackListedIPs.includes(ip)) { 
         res.status(502); 
         return res.send(`Your IP: ${ip} is blacklisted from using our services, have a good day.`)
     }
@@ -187,7 +191,7 @@ router.post("/register", redirectToDashboard, async(req, res, next) => {
 
             return res.send(JSON.stringify(json))
         } 
-        if (req.body.password === req.body.passwordConfirm) {
+        if (req.body.password == req.body.passwordConfirm) {
             let email = req.body.email
             let password = req.body.password
             let firstName = req.body.firstName
