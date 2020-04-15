@@ -36,7 +36,6 @@ let location = db.collection("data").doc("permissionCheck")
     .get().then((doc) => {
         let blackListedIPs = doc.data().blacklistedIPs
         let authip = doc.data().authip
-    
 router.get("/", (req, res, next) => {
     console.log(req.session)
     let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
@@ -46,8 +45,22 @@ router.get("/", (req, res, next) => {
         return res.send(`Your IP: ${ip} is blacklisted from using our services, have a good day.`)
     } else {
         res.status(200)
+        
+        return res.render("about")
+    }
+})
+        
+router.get("/about", (req, res, next) => {
+    console.log(req.session)
+    let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    ip = ip.split("::ffff:")[1]
+    if (blackListedIPs.includes(ip)) {
+        res.status(502)
+        return res.send(`Your IP: ${ip} is blacklisted from using our services, have a good day.`)
+    } else {
+        res.status(200)
 
-        return res.render("index", {
+        return res.render("about", {
             "jonasMail": "jonas.tysbjerg@gmail.com",
             "jonasDiscord": "♰ R1zeN#0001",
             "usmanMail": "usmanmahmood2914@protonmail.com",
