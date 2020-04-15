@@ -23,6 +23,15 @@ const redirectToDashboard = (req, res, next) => {
     }
 }
 
+const adminCheck = (req, res, next) => {
+    if (req.session.admin) {
+        next()
+    } else {
+        res.status(403)
+        res.redirect("/dashboard")
+    }
+}
+
 let location = db.collection("data").doc("permissionCheck")
     .get().then((doc) => {
         let blackListedIPs = doc.data().blacklistedIPs
@@ -104,6 +113,7 @@ router.post("/login", redirectToDashboard, (req, res, next) => {
                 return bcrypt.compare(req.body.password, doc.data().password, function (err, result) {
                     if (result) {
                         req.session.userID = doc.data().id
+                        req.session.admin = doc.data().admin
                         var json = {}
                         json.type = "success";
                         json.title = "Successfully logged in.";
@@ -225,6 +235,10 @@ router.post("/logout", redirectToLogin, (req, res, next) => {
         res.redirect("/login")
     })
 
+})
+
+router.get("/admin", adminCheck, (req, res, next) => {
+    res.sendStatus(200)
 })
 
 function sendMail(email, subject, body, html="") {
