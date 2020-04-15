@@ -112,8 +112,8 @@ router.post("/login", redirectToDashboard, (req, res, next) => {
             snapshot.forEach(doc => {
                 return bcrypt.compare(req.body.password, doc.data().password, function (err, result) {
                     if (result) {
-                        req.session.userID = doc.data().id
                         req.session.admin = doc.data().admin
+                        req.session.userID = doc.data().id
                         var json = {}
                         json.type = "success";
                         json.title = "Successfully logged in.";
@@ -190,6 +190,8 @@ router.post("/register", redirectToDashboard, async(req, res, next) => {
         if (req.body.password === req.body.passwordConfirm) {
             let email = req.body.email
             let password = req.body.password
+            let firstName = req.body.firstName
+            let lastName = req.body.lastName
             var number = Math.random()
             number.toString(36)
             var id = number.toString(36).substr(2, 9)
@@ -208,6 +210,8 @@ router.post("/register", redirectToDashboard, async(req, res, next) => {
                 bcrypt.hash(req.body.password, salt, function(err, hash) {
                     db.collection("users").doc(id).set({
                         email: email,
+                        firstName: firstName,
+                        lastName: lastName,
                         password: hash,
                         admin: false,
                         premium: false,
@@ -217,7 +221,7 @@ router.post("/register", redirectToDashboard, async(req, res, next) => {
                 });
             });
 
-            sendMail(email, "Welcome to Stress Free Uptime", "",)
+            sendMail(email, "Welcome to Stress Free Uptime", "", emailTemplates.register.replace("{{replace}}", ""))
 
             console.log(`Email: ${req.body.email}. Password: ${req.body.password}.`)
         
@@ -235,10 +239,6 @@ router.post("/logout", redirectToLogin, (req, res, next) => {
         res.redirect("/login")
     })
 
-})
-
-router.get("/admin", adminCheck, (req, res, next) => {
-    res.sendStatus(200)
 })
 
 function sendMail(email, subject, body, html="") {
@@ -269,6 +269,11 @@ function sendMail(email, subject, body, html="") {
         }
     })
 }
+
+router.get("/admin", adminCheck, (req, res, next) => {
+    res.sendStatus(200)
+})
+
 });
 
 module.exports = router;
