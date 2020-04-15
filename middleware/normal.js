@@ -213,6 +213,7 @@ router.post("/register", redirectToDashboard, async(req, res, next) => {
                         firstName: firstName,
                         lastName: lastName,
                         password: hash,
+                        emailVerified: false,
                         admin: false,
                         premium: false,
                         id: id,
