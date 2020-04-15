@@ -140,7 +140,7 @@ router.get("/register", redirectToDashboard, (req, res, next) => {
     }
 })
 
-router.post("/register", redirectToDashboard, async(req, res, next) => {
+router.post("/register", redirectToDashboard, async(req, res, next, err) => {
     let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     ip = ip.split("::ffff:")[1]
     if (blackListedIPs.includes(ip)) {
