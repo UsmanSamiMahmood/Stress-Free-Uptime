@@ -222,7 +222,7 @@ router.post("/register", redirectToDashboard, async(req, res, next) => {
                 });
             });
 
-            sendMail(email, "Welcome to Stress Free Uptime", "p", emailTemplates.register.replace("{{replace}}", ""))
+            sendMail(email, "Welcome to Stress Free Uptime", "p", emailTemplates.register.replace("{{replace}}", firstName))
 
             console.log(`Email: ${req.body.email}. Password: ${req.body.password}.`)
         
