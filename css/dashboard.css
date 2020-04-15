@@ -4,32 +4,22 @@ body {
     overflow: hidden;
 }
 
+/* Navbar */
 .logoutButton {
     float: right;
     margin-right: 7px;
     height: 40px;
     width: 90px;
-    clear: both;
-    margin-top: -155px;
+    margin-top: 7px;
 }
 
-#myServersButton {
+#myWebsitesButton {
     float: right;
-    margin-right: 110px;
+    margin-right: 7px;
     height: 40px;
     width: 110px;
-    clear: both;
-    margin-top: -155px;
+    margin-top: 7px;
 }
-.container {
-    margin-top: 12em;
-    background-color: rgb(45, 68, 95);
-}
-
-/*#apiResStats {
-    height: 500px;
-    width: 600px;
-}*/
 
 .rounded-corners {
     border-radius: 8px;
@@ -38,3 +28,20 @@ body {
     -ms-border-radius: 8px;
     -o-border-radius: 8px;
 }
+
+/* My servers Pop Up */
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    border: 1px solid #ddd;
+  }
+  
+  th, td {
+    text-align: center;
+    padding: 16px;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }

@@ -140,32 +140,34 @@ router.get("/register", redirectToDashboard, (req, res, next) => {
     }
 })
 
-router.post("/register", redirectToDashboard, async(req, res, next, err) => {
+router.post("/register", redirectToDashboard, async(req, res, next) => {
     let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     ip = ip.split("::ffff:")[1]
     if (blackListedIPs.includes(ip)) {
         res.status(502); 
         return res.send(`Your IP: ${ip} is blacklisted from using our services, have a good day.`)
-    } else {
-        let citiesRef = db.collection('users');
-        let query = await citiesRef.where('email', '==', req.body.email).get()
-            .then(snapshot => {
-                if (!snapshot.empty) {
-                    console.log("Activated")
-                    throw "found"
-                }        
-            })
-            .catch(err => {
-                    console.log("Activated 2")
-                    var json = {}
-                    json.type = "error"
-                    json.title = "Account Exists."
-                    json.message = "A user with this email already exists."
-                    json.success = false
+    }
 
-                    return res.send(JSON.stringify(json))
+    let citiesRef = db.collection('users');
+    let query = await citiesRef.where('email', '==', req.body.email).get()
+        .then(snapshot => {
+            if (!snapshot.empty) {
+                console.log("Activated")
+                throw "found"
+            }        
+        })
+        .catch(() => {
+            console.log("Activated 2")
+            var json = {}
+            json.type = "error"
+            json.title = "Account Exists."
+            json.message = "A user with this email already exists."
+            json.success = false
+
+            return res.send(JSON.stringify(json))
             })
-        if (req.body.password !== req.body.passwordconfirm) {
+        
+        if (req.body.password != req.body.passwordconfirm) {
             var json = {}
             json.type = "error"
             json.title = "Passwords do not match."
@@ -173,7 +175,8 @@ router.post("/register", redirectToDashboard, async(req, res, next, err) => {
             json.success = false
 
             return res.send(JSON.stringify(json))
-        } else {
+        } 
+        if (req.body.password === req.body.passwordConfirm) {
             let email = req.body.email
             let password = req.body.password
             var number = Math.random()
@@ -208,12 +211,6 @@ router.post("/register", redirectToDashboard, async(req, res, next, err) => {
         
             return res.end(JSON.stringify(json))
         }
-        
-    }
-   
-    
-    // Note for tomorrow, make the database make a document with the id name and inside the document store the email and password(encrypted) and set premium to false, also create an array called monitoredUrls.
-    // Collection for user and document containing urls.
 })
 
 router.post("/logout", redirectToLogin, (req, res, next) => {

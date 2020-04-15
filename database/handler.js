@@ -1,4 +1,4 @@
-const admin = require("firebase-admin")
+const admin = require("firebase-admin");
 const serviceAccount = require("../secrets/serviceAccount.json");
 
 admin.initializeApp({
