@@ -178,7 +178,7 @@ router.post("/register", redirectToDashboard, async(req, res, next) => {
             return res.send(JSON.stringify(json))
             })
         
-        if (req.body.password != req.body.passwordconfirm) {
+        if (req.body.password != req.body.passwordConfirm) {
             var json = {}
             json.type = "error"
             json.title = "Passwords do not match."

@@ -1,20 +1,24 @@
 window.onload=function(){
-    const form = document.querySelector("#register-form")
+    const form = document.querySelector("#register-form");
 
     form.addEventListener('submit', evt => {
         evt.preventDefault();
 
         let email = document.getElementById("email").value;
         let password = document.getElementById("password").value;
-        let passwordConfirm = this.document.getElementById("passwordconfirm").value;
+        let passwordConfirm = document.getElementById("passwordconfirm").value;
+        let firstName = document.getElementById("firstName").value;
+        let lastName = document.getElementById("lastName").value;
 
         $.ajax({
             method: "POST",
             url: "/register",
             data: {
                 email: email,
+                firstName: firstName,
+                lastName: lastName,
                 password: password,
-                passwordconfirm: passwordConfirm,
+                passwordConfirm: passwordConfirm
             },
                 success: function(body) {
                     var json = JSON.parse(body);
