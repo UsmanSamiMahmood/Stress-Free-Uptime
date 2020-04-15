@@ -13,9 +13,17 @@ const session = require("express-session");
 const time = 1000 * 60 * 60 * 2
 const { db } = require("./database/handler.js");
 
+function makeId() {
+  var number = Math.random()
+  number.toString(36)
+  var id = number.toString(36).substr(2, 9)
+
+  return id
+}
+
 const {
   SESSION_LIFETIME = time,
-  SESSION_NAME = "sid",
+  SESSION_NAME = makeId(),
   SESSION_SECRET = "5etfrhsdjkfh5fsdfkj",
   NODE_ENV = "development"
 } = process.env
@@ -31,8 +39,6 @@ const apilimiter = rateLimit({
   windowMs: 900000,
   max: 50,
 })
-
-const users = "add data later."
 
 app.set("view engine", "ejs");
 
