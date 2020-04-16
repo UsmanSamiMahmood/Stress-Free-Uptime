@@ -46,21 +46,7 @@ router.get("/", (req, res, next) => {
     } else {
         res.status(200)
         
-        return res.render("index")
-    }
-})
-        
-router.get("/about", (req, res, next) => {
-    console.log(req.session)
-    let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    ip = ip.split("::ffff:")[1]
-    if (blackListedIPs.includes(ip)) {
-        res.status(502)
-        return res.send(`Your IP: ${ip} is blacklisted from using our services, have a good day.`)
-    } else {
-        res.status(200)
-
-        return res.render("about", {
+        return res.render("index", {
             "jonasMail": "jonas.tysbjerg@gmail.com",
             "jonasDiscord": "♰ R1zeN#0001",
             "usmanMail": "usmanmahmood2914@protonmail.com",
@@ -257,6 +243,10 @@ router.post("/logout", redirectToLogin, (req, res, next) => {
         res.redirect("/login")
     })
 
+})
+
+router.get("/offers", async(req, res, next) => {
+    res.render("offers")
 })
 
 function sendMail(email, subject, body, html="") {

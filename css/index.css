@@ -5,22 +5,180 @@ html {
 }
 
 body {
-    height: 100%;
-    top: 0;
-    width: 100%;
-    background: url("https://s-media-cache-ak0.pinimg.com/originals/8c/34/93/8c3493452f99868274fd1fe352b13b3f.jpg");
+    background: url("https://wonderfulengineering.com/wp-content/uploads/2016/01/Los-Angeles-Wallpaper-12.jpeg");
+    background-size: cover;
+    background-repeat: repeat-y;
 }
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 
 /* Header */
 
 header {
     width: 100%;
-    background-color: rgba(8, 62, 163, 0.835);
+    background-color: rgba(8, 62, 189, 0.541);
     height: 500px;
+    margin-top: -20px;
 }
 
 header h1 {
+    position: fixed;
+    z-index: 12;
+    top: 0;
+    margin-left: 50%;
+    transform: translate(-50%);
+    font-size: 45px;
     color: white;
+    -webkit-transform: translate(-50%);
+    -moz-transform: translate(-50%);
+    -ms-transform: translate(-50%);
+    -o-transform: translate(-50%);
+}
+
+nav {
+    width: 100%;
+    font-size: 26px;
+    z-index: 12;
+    position: fixed;
+    padding-bottom: 12px;
+    transition:500ms ease;
+    top: 0;
+    -webkit-transition:500ms ease;
+    -moz-transition:500ms ease;
+    -ms-transition:500ms ease;
+    -o-transition:500ms ease;
+}
+
+.scrolled {
+    background-color: rgba(136, 125, 24, 0.418);
+    color: rgb(255, 255, 255);
+}
+
+nav .btn {
+    margin-top: 12px;
+    height: 55px;
+    width: 120px;
+    float: right;
+}
+
+nav :first-child {
+    margin-left: 6px;
+    margin-right: 8px;
+}
+
+.getStartedBtn {
+    transition:500ms ease;
+    -webkit-transition:200ms ease;
+    -moz-transition:500ms ease;
+    -ms-transition:500ms ease;
+    -o-transition:500ms ease;
+    width: 300px;
+    background-color: rgb(221, 189, 7);
+    color: black;
+    font-size: 20px;
+    height: 130px;
+    margin-top: 300px;
+}
+
+.getStartedBtn:hover {
+    background-color: rgb(255, 166, 1);
+}
+
+#pointerHand {
+    height: 40px;
+    color: white;
+    margin-top: 100px;
+}
+
+/* Other Styling */
+.title {
+    font-size: 60px;
+    color: white;
+    margin-top: 20px;
+    text-shadow: 2px 2px 3px black;
+    font-weight: bold;
+}
+
+/* Container Style */
+
+.container {
+    border: 2px solid white;
+    width: 90%;
+}
+
+/* About Us */
+
+.textBox {
+    float: left;
+    margin-right: 60px;
+    z-index: 6;
+    width: 430px;
+    height: 500px;
+    background-color: rgb(20, 99, 151);
+    opacity: 80%;
+}
+.textBox-firstElement {
+    margin-left: 60px;
+}
+.textBox h2 {
+    opacity: 100%;
+    color: antiquewhite;
+}
+
+.textBox p {
+    opacity: 100%;
+    color: rgb(212, 212, 212);
+}
+
+.devName {
+    opacity: 100%;
+    outline: medium;
+    outline-width: 2px;
+    text-align: left;
+    outline-color: white;
+    font-weight: bold;
+    color: rgb(0, 204, 255);
+}
+
+.devBio {
+    text-align: left;
+}
+
+/* Features */
+#features {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    width: 100%;
+}
+.feature {
+    float: left;
+    background-color: rgb(20, 99, 151);
+    opacity: 80%;
+    width: 210px;
+    height: 190px;
+    color: white;
+}
+
+.featurePic {
+    height: 50px;
 }
 
 /* Footer */
