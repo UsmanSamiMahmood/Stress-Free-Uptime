@@ -124,6 +124,7 @@ router.post("/login", redirectToDashboard, (req, res, next) => {
                         req.session.userID = doc.data().id
                         req.session.isPremium = doc.data().premium
                         req.session.isVerified = doc.data().emailVerified
+                        req.session.isBanned = doc.data().banned
                         var json = {}
                         json.type = "success";
                         json.title = "Successfully logged in.";
@@ -236,7 +237,8 @@ router.post("/register", redirectToDashboard, registerLimiter, async(req, res, n
                         admin: false,
                         premium: false,
                         id: id,
-                        websites: 0
+                        websites: 0,
+                        banned: false
                     })
                 });
             });
@@ -296,7 +298,7 @@ function sendMail(email, subject, body, html="") {
 }
 
 router.get("/admin", adminCheck, (req, res, next) => {
-    res.sendStatus(200)
+    res.sendStatus(418)
 })
 
 });
