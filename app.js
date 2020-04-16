@@ -57,7 +57,7 @@ app.use("/css",express.static(__dirname + "/css"));
 app.use("/js",express.static(__dirname + "/js"))
 app.use("/", normalRoute);
 app.use("/images",express.static(__dirname + "/images"))
-app.use("/api", apilimiter, apiRoute);
+app.use("/api", /*apilimiter,*/ apiRoute);
 
 console.log(figlet.textSync("Stress Free Uptime", {font: 'rectangles'}));
 console.log("\nStress Free Uptime is a service brought to you by Usman Mahmood and Jonas Schiott.");
