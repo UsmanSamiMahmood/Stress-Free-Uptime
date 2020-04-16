@@ -1,189 +1,44 @@
-@media only screen and (min-width: 600px) {
-    /* Basic Styling */
-    html {
-        padding: 0;
-        margin: 0;
-    }
-
-    body {
-    /*  background: rgba(41, 90, 119, 0.267);*/
-    background: url("https://www.setaswall.com/wp-content/uploads/2017/11/Tokyo-Wallpaper-38-1920x1080.jpg");
-    }
-
-    /* Login Button */
-    .loginButton {
-        position: absolute;
-        right: 7px;
-        top: 7px;
-        height: 50px;
-        width: 100px;
-        color: white;
-        background-color: rgb(0, 61, 114);
-        background-blend-mode: screen;
-        transition: 360ms ease;
-        -webkit-transition: 360ms ease;
-        -moz-transition: 360ms ease;
-        -ms-transition: 360ms ease;
-        -o-transition: 360ms ease;
-    }
-
-    .loginButton:hover {
-        background-color: rgb(3, 81, 149);
-        color: white;
-    }
-    /* Body of Page */
-    .title {
-        font-size: 60px;
-        font-weight: bold;
-    }
-
-    .container {
-        width: 100%;
-        border: 5px green;
-    }
-
-    .textBox {
-        float: left;
-        margin-top: 120px;
-        margin-right: 80px;
-        width: 430px;
-        height: 500px;
-        background-color: rgb(20, 99, 151);
-        opacity: 80%;
-    }
-    .textBox-firstElement {
-        margin-left: 100px;
-    }
-    .textBox h2 {
-        opacity: 100%;
-        color: antiquewhite;
-    }
-
-    .textBox p {
-        opacity: 100%;
-        color: rgb(212, 212, 212);
-    }
-
-    .devName {
-        opacity: 100%;
-        outline: medium;
-        outline-width: 2px;
-        text-align: left;
-        outline-color: white;
-        font-weight: bold;
-        color: rgb(0, 204, 255);
-    }
-
-    .devBio {
-        text-align: left;
-    }
-    /* Footer */
-    .footer {
-        position: fixed;
-        left: 0;
-        bottom: 0;
-        width: 100%;
-        padding: 0;
-        margin: 0;
-        height: 50px;
-        background-color: rgb(3, 80, 124);
-        color: white;
-        text-align: center;
-    }
-
-    .footer p {
-        padding-top: 15px;
-        font-weight: bold;
-        letter-spacing: 1px;
-    }
+/* Basic Styling */
+html {
+    padding: 0;
+    margin: 0;
 }
-/* Mobile Compatibility */
-@media only screen and (max-width: 600px) {
-        /* Basic Styling */
-        html {
-            padding: 0;
-            margin: 0;
-        }
-    
-        body {
-        /*  background: rgba(41, 90, 119, 0.267);*/
-        background: url("https://www.setaswall.com/wp-content/uploads/2017/11/Tokyo-Wallpaper-38-1920x1080.jpg");
-        }
-    
-        /* Login Button */
-        .loginButton {
-            position: absolute;
-            right: 235px;
-            top: 150px;
-            height: 50px;
-            width: 100px;
-            color: white;
-            background-color: rgb(0, 61, 114);
-            background-blend-mode: screen;
-        }
-    
-        .loginButton:hover {
-            background-color: rgb(3, 81, 149);
-            color: white;
-        }
-        /* Body of Page */
-        .title {
-            font-size: 60px;
-            font-weight: bold;
-        }
-    
-        .container {
-            width: 100%;
-        }
-    
-        .textBox {
-            margin-top: 120px;
-            margin-left: 50;
-            width: 430px;
-            height: 500px;
-            background-color: rgb(20, 99, 151);
-            opacity: 80%;
-        }
-        .textBox h2 {
-            opacity: 100%;
-            color: antiquewhite;
-        }
-    
-        .textBox p {
-            opacity: 100%;
-            color: rgb(212, 212, 212);
-        }
-    
-        .devName {
-            opacity: 100%;
-            outline: medium;
-            outline-width: 2px;
-            text-align: left;
-            outline-color: white;
-            font-weight: bold;
-            color: rgb(0, 204, 255);
-        }
-    
-        .devBio {
-            text-align: left;
-        }
-        /* Footer */
-        .footer {
-            position: fixed;
-            left: 0;
-            bottom: 0;
-            width: 100%;
-            padding: 0;
-            margin: 0;
-            height: 50px;
-            background-color: rgb(3, 80, 124);
-            color: white;
-            text-align: center;
-        }
-    
-        .footer p {
-            padding-top: 15px;
-            font-weight: bold;
-            letter-spacing: 1px;
-        }
+
+body {
+    height: 100%;
+    top: 0;
+    width: 100%;
+    background: url("https://s-media-cache-ak0.pinimg.com/originals/8c/34/93/8c3493452f99868274fd1fe352b13b3f.jpg");
+}
+
+/* Header */
+
+header {
+    width: 100%;
+    background-color: rgba(8, 62, 163, 0.835);
+    height: 500px;
+}
+
+header h1 {
+    color: white;
+}
+
+/* Footer */
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    height: 50px;
+    background-color: rgb(3, 80, 124);
+    color: white;
+    text-align: center;
+}
+
+.footer p {
+    padding-top: 15px;
+    font-weight: bold;
+    letter-spacing: 1px;
 }

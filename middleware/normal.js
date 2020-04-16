@@ -46,7 +46,7 @@ router.get("/", (req, res, next) => {
     } else {
         res.status(200)
         
-        return res.render("about")
+        return res.render("index")
     }
 })
         
