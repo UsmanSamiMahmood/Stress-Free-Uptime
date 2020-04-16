@@ -30,17 +30,14 @@ const {
 
 const IN_PRODUCTION = NODE_ENV === 'production'
 
-const limiter = rateLimit({
-  windowMs: 900000,
-  max: 100,
-})
-
 const apilimiter = rateLimit({
   windowMs: 900000,
   max: 50,
 })
 
 app.set("view engine", "ejs");
+
+app.set('trust proxy', 1)
 
 app.use(session({
   name: SESSION_NAME,
@@ -58,7 +55,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use("/views",express.static(__dirname + "/views"));
 app.use("/css",express.static(__dirname + "/css"));
 app.use("/js",express.static(__dirname + "/js"))
-app.use("/", limiter, normalRoute);
+app.use("/", normalRoute);
 app.use("/images",express.static(__dirname + "/images"))
 app.use("/api", apilimiter, apiRoute);
 

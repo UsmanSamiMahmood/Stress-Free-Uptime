@@ -6,6 +6,7 @@ const nodemailer = require('nodemailer');
 const { emailPassword } = require("../secrets/config.json");
 const { SESSION_NAME } = require("../app.js");
 const emailTemplates = require("../emailTemplates.json");
+const rateLimit = require("express-rate-limit");
 
 const redirectToLogin = (req, res, next) => {
     if (!req.session.userID) {
@@ -31,6 +32,12 @@ const adminCheck = (req, res, next) => {
         res.redirect("/dashboard")
     }
 }
+
+const registerLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000,
+    max: 5,
+    message: "Too many accounts created from your IP, please try again after 1 hour."
+})
 
 let location = db.collection("data").doc("permissionCheck")
     .get().then((doc) => {
@@ -168,14 +175,21 @@ router.get("/register", redirectToDashboard, (req, res, next) => {
     }
 })
 
-router.post("/register", redirectToDashboard, async(req, res, next) => {
+router.post("/register", redirectToDashboard, registerLimiter, async(req, res, next) => {
     global.existAlready = false;
+
+    console.log(req.body)
+
+    if (!req.body.email) return res.end("Cannot send POST request with empty or insufficient content.")
+
     let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     ip = ip.split("::ffff:")[1]
     if (blackListedIPs.includes(ip)) { 
         res.status(502); 
         return res.send(`Your IP: ${ip} is blacklisted from using our services, have a good day.`)
-    }
+    } 
+    
+    //if (!req.body) return res.end("Cannot send POST request with empty content.")
 
     let citiesRef = db.collection('users');
     let query = await citiesRef.where('email', '==', req.body.email).get()

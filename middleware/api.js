@@ -58,7 +58,7 @@ router.get("/addwebsite", (req, res, next) => {
     
 });
 
-router.get("/blacklist", (req, res, next) => {
+router.post("/blacklist", (req, res, next) => {
     let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     ip = ip.split("::ffff:")[1]
     console.log(ip)
@@ -71,12 +71,12 @@ router.get("/blacklist", (req, res, next) => {
             res.status(503);
             return res.send(`Your IP: ${ip} does not have permission to send data to this url.`);
         } else {
-            if (!req.query.ip) {
+            if (!req.body.ip) {
                 res.status(200).json({
                     error: "IP not specified."
                 })
             } else {
-                db.collection("data").doc("permissionCheck").update("authip", blackListedIPs.push(req.query.ip))
+                db.collection("data").doc("permissionCheck").update("authip", blackListedIPs.push(req.body.ip))
                 res.status(200).json({
                     success: `${ip} was blacklisted.`
                 })
