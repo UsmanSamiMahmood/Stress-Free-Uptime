@@ -155,6 +155,7 @@ router.get("/register", redirectToDashboard, (req, res, next) => {
 })
 
 router.post("/register", redirectToDashboard, async(req, res, next) => {
+    global.existAlready = false;
     let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     ip = ip.split("::ffff:")[1]
     if (blackListedIPs.includes(ip)) { 
@@ -178,8 +179,8 @@ router.post("/register", redirectToDashboard, async(req, res, next) => {
             json.message = "A user with this email already exists."
             json.success = false
 
-            return res.send(JSON.stringify(json))
-            })
+            return res.send(JSON.stringify(json)), global.existAlready = true;
+        })
         
         if (req.body.password != req.body.passwordConfirm) {
             var json = {}
@@ -191,6 +192,7 @@ router.post("/register", redirectToDashboard, async(req, res, next) => {
             return res.send(JSON.stringify(json))
         } 
         if (req.body.password == req.body.passwordConfirm) {
+            if (global.existAlready) return;
             let email = req.body.email
             let password = req.body.password
             let firstName = req.body.firstName
@@ -225,6 +227,7 @@ router.post("/register", redirectToDashboard, async(req, res, next) => {
                 });
             });
 
+           
             sendMail(email, "Welcome to Stress Free Uptime", "p", emailTemplates.register.replace("{{replace}}", firstName))
 
             console.log(`Email: ${req.body.email}. Password: ${req.body.password}.`)
