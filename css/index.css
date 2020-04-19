@@ -68,7 +68,7 @@ nav {
 }
 
 .scrolled {
-    background-color: rgba(136, 125, 24, 0.418);
+    background-color: rgb(8, 111, 195);
     color: rgb(255, 255, 255);
 }
 
@@ -102,12 +102,6 @@ nav :first-child {
     background-color: rgb(255, 166, 1);
 }
 
-#pointerHand {
-    height: 40px;
-    color: white;
-    margin-top: 100px;
-}
-
 /* Other Styling */
 .title {
     font-size: 60px;
@@ -122,6 +116,7 @@ nav :first-child {
 .container {
     border: 2px solid white;
     width: 90%;
+    margin-bottom: 4em;
 }
 
 /* About Us */
@@ -165,20 +160,23 @@ nav :first-child {
 /* Features */
 #features {
     margin-top: 15px;
-    margin-bottom: 15px;
+    margin-bottom: 8em;
     width: 100%;
 }
 .feature {
     float: left;
     background-color: rgb(20, 99, 151);
     opacity: 80%;
-    width: 210px;
-    height: 190px;
+    margin-right: 8px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    width: 230px;
+    height: 250px;
     color: white;
 }
 
 .featurePic {
-    height: 50px;
+    height: 65px;
 }
 
 /* Footer */
