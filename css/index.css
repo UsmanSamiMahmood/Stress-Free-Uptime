@@ -5,9 +5,7 @@ html {
 }
 
 body {
-    background: url("https://wonderfulengineering.com/wp-content/uploads/2016/01/Los-Angeles-Wallpaper-12.jpeg");
-    background-size: cover;
-    background-repeat: repeat-y;
+    background-color: rgba(179, 179, 179, 0.486);
 }
 
 /* width */
@@ -34,8 +32,8 @@ body {
 
 header {
     width: 100%;
-    background-color: rgba(8, 62, 189, 0.541);
-    height: 500px;
+    background-color: #333;
+    height: 400px;
     margin-top: -20px;
 }
 
@@ -67,9 +65,36 @@ nav {
     -o-transition:500ms ease;
 }
 
+nav svg {
+    height: 60px;
+    color: white;
+    display: none;
+    float: right;
+}
+
 .scrolled {
-    background-color: rgb(8, 111, 195);
-    color: rgb(255, 255, 255);
+    background-color: rgb(9, 93, 9);
+}
+.scrolled .btn {
+    display: none;
+}
+.scrolled svg {
+    margin-top: 7px;
+    margin-right: 15px;
+    display: block;
+    cursor: pointer;
+}
+
+
+.btn {
+    background-color: transparent;
+    outline: 1px solid green;
+    color: white;
+}
+
+.btn:hover {
+    outline: 2px solid rgb(16, 110, 20);
+    color: rgb(23, 231, 86);
 }
 
 nav .btn {
@@ -80,32 +105,14 @@ nav .btn {
 }
 
 nav :first-child {
-    margin-left: 6px;
+    margin-left: 12px;
     margin-right: 8px;
-}
-
-.getStartedBtn {
-    transition:500ms ease;
-    -webkit-transition:200ms ease;
-    -moz-transition:500ms ease;
-    -ms-transition:500ms ease;
-    -o-transition:500ms ease;
-    width: 300px;
-    background-color: rgb(221, 189, 7);
-    color: black;
-    font-size: 20px;
-    height: 130px;
-    margin-top: 300px;
-}
-
-.getStartedBtn:hover {
-    background-color: rgb(255, 166, 1);
 }
 
 /* Other Styling */
 .title {
     font-size: 60px;
-    color: white;
+    color: rgb(47, 149, 7);
     margin-top: 20px;
     text-shadow: 2px 2px 3px black;
     font-weight: bold;
@@ -114,7 +121,6 @@ nav :first-child {
 /* Container Style */
 
 .container {
-    border: 2px solid white;
     width: 90%;
     margin-bottom: 4em;
 }
@@ -127,7 +133,7 @@ nav :first-child {
     z-index: 6;
     width: 430px;
     height: 500px;
-    background-color: rgb(20, 99, 151);
+    background-color: rgb(20, 134, 26);
     opacity: 80%;
 }
 .textBox-firstElement {
@@ -148,9 +154,10 @@ nav :first-child {
     outline: medium;
     outline-width: 2px;
     text-align: left;
+    text-shadow: 2px 2px 3px black;
     outline-color: white;
     font-weight: bold;
-    color: rgb(0, 204, 255);
+    color: rgb(144, 142, 3);
 }
 
 .devBio {
@@ -160,12 +167,14 @@ nav :first-child {
 /* Features */
 #features {
     margin-top: 15px;
+    float: inherit;
     margin-bottom: 8em;
     width: 100%;
 }
+/*background-color: rgb(20, 99, 151);*/
 .feature {
     float: left;
-    background-color: rgb(20, 99, 151);
+    background-color: rgb(20, 134, 26);
     opacity: 80%;
     margin-right: 8px;
     padding-top: 5px;
@@ -173,6 +182,11 @@ nav :first-child {
     width: 230px;
     height: 250px;
     color: white;
+}
+
+.feature h3 {
+    color: white;
+    text-shadow: 1px 1px 1.5px black;
 }
 
 .featurePic {
