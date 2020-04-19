@@ -213,6 +213,7 @@ nav :first-child {
 }
 
 .footer svg {
+    cursor: pointer;
     height: 50px;
     margin-right: 14px;
     margin-top: 60px;
