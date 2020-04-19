@@ -109,6 +109,10 @@ nav :first-child {
     margin-right: 8px;
 }
 
+.nav #offersButton {
+    margin-left: 7px;
+    float: left;
+}
 /* Other Styling */
 .title {
     font-size: 60px;
@@ -195,20 +199,27 @@ nav :first-child {
 
 /* Footer */
 .footer {
-    position: fixed;
-    left: 0;
-    bottom: 0;
     width: 100%;
-    padding: 0;
-    margin: 0;
-    height: 50px;
-    background-color: rgb(3, 80, 124);
-    color: white;
-    text-align: center;
+    background-color: #333;
+    height: 150px;
 }
 
-.footer p {
-    padding-top: 15px;
-    font-weight: bold;
-    letter-spacing: 1px;
+.footer h2 {
+    color: white;
+    margin-top: 60px;
+    margin-left: 14px;
+    font-size: 24px;
+    float: left;
+}
+
+.footer svg {
+    height: 50px;
+    margin-right: 14px;
+    margin-top: 60px;
+    color: white;
+    float: right;
+}
+
+.footer #mailBtn {
+    height: 40px;
 }
