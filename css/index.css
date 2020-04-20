@@ -5,7 +5,7 @@ html {
 }
 
 body {
-    background-color: rgba(179, 179, 179, 0.486);
+    background-color: rgba(92, 42, 42, 0.842);
 }
 
 /* width */
@@ -32,9 +32,10 @@ body {
 
 header {
     width: 100%;
-    background-color: #333;
+    background-color: rgb(51, 51, 51);
     height: 400px;
     margin-top: -20px;
+    outline: 3px solid #fff;
 }
 
 header h1 {
@@ -116,9 +117,9 @@ nav :first-child {
 /* Other Styling */
 .title {
     font-size: 60px;
+    background-color: #333;
     color: rgb(47, 149, 7);
-    margin-top: 20px;
-    text-shadow: 2px 2px 3px black;
+    text-shadow: 2px 2px 3px rgb(0, 0, 0);
     font-weight: bold;
 }
 
@@ -132,13 +133,13 @@ nav :first-child {
 /* About Us */
 
 .textBox {
+    margin: 12px 12px;
     float: left;
     margin-right: 60px;
     z-index: 6;
     width: 430px;
     height: 500px;
-    background-color: rgb(20, 134, 26);
-    opacity: 80%;
+    outline: 2px solid rgb(20, 134, 26);
 }
 .textBox-firstElement {
     margin-left: 60px;
@@ -171,20 +172,21 @@ nav :first-child {
 /* Features */
 #features {
     margin-top: 15px;
+    background-color: #333;
     float: inherit;
     margin-bottom: 8em;
     width: 100%;
 }
-/*background-color: rgb(20, 99, 151);*/
+/*background-color: rgb(20, 134, 26);*/
 .feature {
     float: left;
-    background-color: rgb(20, 134, 26);
-    opacity: 80%;
+    background-color: #333;
     margin-right: 8px;
-    padding-top: 5px;
-    padding-bottom: 5px;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    outline: 2px solid rgb(20, 134, 26);
     width: 230px;
-    height: 250px;
+    height: 300px;
     color: white;
 }
 
@@ -202,6 +204,7 @@ nav :first-child {
     width: 100%;
     background-color: #333;
     height: 150px;
+    outline: 3px solid #fff;
 }
 
 .footer h2 {
@@ -219,6 +222,10 @@ nav :first-child {
     margin-top: 60px;
     color: white;
     float: right;
+}
+
+.footer svg:first-child {
+    margin-right: 500px;
 }
 
 .footer #mailBtn {
