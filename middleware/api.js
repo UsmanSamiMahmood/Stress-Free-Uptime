@@ -6,20 +6,43 @@ let location = db.collection("data").doc("permissionCheck")
         let blackListedIPs = doc.data().blacklistedIPs
         let authip = doc.data().authip
 
-        
 
-router.get("/", (req, res, next) => {
+const blacklistedCheck = (req, res, next) => {
     let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     ip = ip.split("::ffff:")[1]
     if (blackListedIPs.includes(ip)) {
-        res.status(502);
-        res.send(`Your IP: ${ip} is blacklisted from using our services, have a good day.`);
+        return res.status(502).send(`Your IP: ${ip} is blacklisted from using our services, have a good day.`)
     } else {
-        res.status(200).json({
-            message: "Incorrect path specified."
-        })
+        next()
     }
+}
+
+router.get("/", blacklistedCheck, (req, res, next) => {
+    res.status(200).json({ message: "Incorrect path specified." });
 });
+
+router.get("/user", blacklistedCheck, (req, res, next) => {
+    console.log(req.session)
+    if (!req.session.userID) return res.status(400).json({ error: "You must be logged in to use this." })
+    if (!req.session.admin) {
+        let loc = db.collection('users').doc(req.session.userID)
+            .get().then((doc) => {
+                res.status(200).json({ admin: doc.data().admin, banned: doc.data().false, email:  doc.data().email, emailVerified: doc.data().emailVerified, firstName: doc.data().firstName, lastName: doc.data().lastName, FullName: doc.data().firstName + " " + doc.data().lastName, Premium: doc.data().premium, Websites: doc.data().websites});
+                
+            })
+
+    } else {
+        if (!req.query.id) return res.status(400).json({ error: "ID not specified." })
+        let l = db.collection('users').doc(req.query.id)
+            .get().then((docSnapshot) => {
+                if (!docSnapshot.exists) return res.status(400).json({ error: "An error occured, did you supply a valid ID? Contact backend developer is problems persist." }); throw "found"
+            })
+        let ll = db.collection('users').doc(req.query.id)
+            .get().then((doc) => {
+                return res.status(200).json({ admin: doc.data().admin, banned: doc.data().false, email:  doc.data().email, emailVerified: doc.data().emailVerified, firstName: doc.data().firstName, lastName: doc.data().lastName, FullName: doc.data().firstName + " " + doc.data().lastName, Premium: doc.data().premium, Websites: doc.data().websites});
+            })
+    }
+})
 
 router.get("/addwebsite", (req, res, next) => {
     let url = req.query.url; let interval = req.query.interval; let premium = req.query.premium;
