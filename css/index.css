@@ -5,7 +5,7 @@ html {
 }
 
 body {
-    background-color: rgba(92, 42, 42, 0.842);
+    background-color: rgba(1, 18, 44, 0.842);
 }
 
 /* width */
@@ -119,6 +119,7 @@ nav :first-child {
     font-size: 60px;
     background-color: #333;
     color: rgb(47, 149, 7);
+    margin-top: -1px;
     text-shadow: 2px 2px 3px rgb(0, 0, 0);
     font-weight: bold;
 }
@@ -204,7 +205,7 @@ nav :first-child {
     width: 100%;
     background-color: #333;
     height: 150px;
-    outline: 3px solid #fff;
+    outline: 3px solid rgb(24, 65, 252);
 }
 
 .footer h2 {
