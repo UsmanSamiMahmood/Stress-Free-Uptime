@@ -59,7 +59,12 @@ router.get("/", blacklistedCheck, (req, res, next) => {
 })
 
 router.get("/dashboard", redirectToLogin, blacklistedCheck, (req, res, next) => {
-    res.status(200).render('dashboard', { userAdmin: req.session.admin });
+    res.status(200).render('dashboard', { userAdmin: req.session.admin, firstSession: req.session.firstSession });
+    if(req.session.firstSession) {
+       db.collection("users").doc(req.session.id).update({ firstSession: false });
+       req.session.firstSession = false 
+    }
+    
 })
 
 router.get("/login", redirectToDashboard, blacklistedCheck, (req, res, next) => {
@@ -82,6 +87,7 @@ router.get('/verify/:token', async (req, res, next) => {
                     req.session.isPremium = doc.data().premium
                     req.session.isVerified = doc.data().emailVerified
                     req.session.isBanned = doc.data().banned
+                    req.session.firstSession = doc.data().firstSession
                     res.send('<h1>Successfully Verified!</h1>')
                     return res.redirect('/dashboard');
                 }
@@ -123,7 +129,7 @@ router.post("/login", redirectToDashboard, (req, res, next) => {
                 return bcrypt.compare(req.body.password, doc.data().password, function (err, result) {
                     if (result) {
 
-                        if (!doc.data().verified) {
+                        if (!doc.data().emailVerified) {
                             var json = {}
                             json.type = "error";
                             json.title = "Error Encountered"
@@ -137,6 +143,8 @@ router.post("/login", redirectToDashboard, (req, res, next) => {
                             req.session.isPremium = doc.data().premium
                             req.session.isVerified = doc.data().emailVerified
                             req.session.isBanned = doc.data().banned
+                            req.session.firstSession = doc.data().firstSession
+
                             var json = {}
                             json.type = "success";
                             json.title = "Successfully logged in.";
@@ -242,6 +250,7 @@ router.post("/register", redirectToDashboard, registerLimiter, async(req, res, n
                         premium: false,
                         id: id,
                         websites: 0,
+                        firstSession: true,
                         banned: false,
                         verifyID: uuid
                     })

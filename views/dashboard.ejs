@@ -9,9 +9,11 @@
 </head>
 <body>
   <nav>
-    <div class="alert alert-warning" role="alert">
-      <p>You must verify your e-mail first.</p>
-  </div>
+    <% if (firstSession) { %>
+    <div class="alert alert-success" role="alert">
+      <p>Successfully verified email.</p>
+    </div>
+  <% } %>
     <form action="/logout" method="POST">
       <button type="submit" class="logoutButton rounded-corners btn btn-danger" id="logoutButton">Logout</button>
     </form>
