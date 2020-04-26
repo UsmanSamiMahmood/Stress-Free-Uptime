@@ -14,7 +14,7 @@ const redirectToLogin = (req, res, next) => {
     } else {
       next()
     }
-}
+}; 
 
 const redirectToDashboard = (req, res, next) => {
     if (req.session.userID) {
@@ -22,7 +22,7 @@ const redirectToDashboard = (req, res, next) => {
     } else {
       next()
     }
-}
+};
 
 const adminCheck = (req, res, next) => {
     if (req.session.admin) {
@@ -31,77 +31,54 @@ const adminCheck = (req, res, next) => {
         res.status(403)
         res.redirect("/dashboard")
     }
-}
+};
 
 const registerLimiter = rateLimit({
     windowMs: 60 * 60 * 1000,
     max: 5,
     message: "Too many accounts created from your IP, please try again after 1 hour."
-})
+});
 
 let location = db.collection("data").doc("permissionCheck")
     .get().then((doc) => {
         let blackListedIPs = doc.data().blacklistedIPs
         let authip = doc.data().authip
-router.get("/", (req, res, next) => {
-    console.log(req.session)
+
+const blacklistedCheck = (req, res, next) => {
     let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     ip = ip.split("::ffff:")[1]
     if (blackListedIPs.includes(ip)) {
-        res.status(502)
-        return res.send(`Your IP: ${ip} is blacklisted from using our services, have a good day.`)
+        return res.status(502).send(`Your IP; ${ip} is blacklisted from using our services, have a good day.`)
     } else {
-        res.status(200)
-        
-        return res.render("index", {
-            "jonasMail": "jonas.tysbjerg@gmail.com",
-            "jonasDiscord": "♰ R1zeN#0001",
-            "usmanMail": "usmanmahmood2914@protonmail.com",
-            "usmanDiscord": "MrShadow#0001"
-        })
+        next()
     }
+}
+router.get("/", blacklistedCheck, (req, res, next) => {
+    console.log(req.session)
+    return res.status(200).render('index', { "jonasMail": "jonas.tysbjerg@gmail.com", "jonasDiscord": "♰ R1zeN#0001", "usmanMail": "usmanmahmood2914@protonmail.com", "usmanDiscord": "MrShadow#0001" });
 })
 
-router.get("/dashboard", redirectToLogin, (req, res, next) => {
-    console.log(req.session)
-    let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    ip = ip.split("::ffff:")[1]
-    if (blackListedIPs.includes(ip)) {
-        res.status(502)
-        return res.send(`Your IP: ${ip} is blacklisted from using our services, have a good day.`)
-    } else {
-        res.status(200)
-        return res.render("dashboard", {
-            userAdmin: req.session.admin
-        })
-    }
+router.get("/dashboard", redirectToLogin, blacklistedCheck, (req, res, next) => {
+    res.status(200).render('dashboard', { userAdmin: req.session.admin });
 })
 
-router.get("/login", redirectToDashboard, (req, res, next) => {
-    let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    ip = ip.split("::ffff:")[1]
-    if (blackListedIPs.includes(ip)) {
-        res.status(502)
-        return res.send(`Your IP: ${ip} is blacklisted from using our services, have a good day.`)
-    } else {
-        res.status(200)
-        return res.render("login");
-    }
+router.get("/login", redirectToDashboard, blacklistedCheck, (req, res, next) => {
+    return res.status(200).render('login');
 })
+
+// Note for self, do not edit post routes.
 
 router.post("/login", redirectToDashboard, (req, res, next) => {
     let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     ip = ip.split("::ffff:")[1]
     if (blackListedIPs.includes(ip)) {
-        res.status(502)
         var json = {}
         json.type = "error"
         json.title = "Error Encountered"
         json.message = `Your IP: ${ip} is blacklisted from using our services.`
         json.success = false
 
-        return res.send(JSON.stringify(json))
-
+        return res.status(502).send(JSON.stringify(json))
     } else {
         res.status(200)
         let citiesRef = db.collection('users');
@@ -150,16 +127,8 @@ router.post("/login", redirectToDashboard, (req, res, next) => {
     }
 })
 
-router.get("/register", redirectToDashboard, (req, res, next) => {
-    let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    ip = ip.split("::ffff:")[1]
-    if (blackListedIPs.includes(ip)) {
-        res.status(502)
-        return res.send(`Your IP: ${ip} is blacklisted from using our services, have a good day.`)
-    } else {
-        res.status(200)
-        return res.render("register");
-    }
+router.get("/register", redirectToDashboard, blacklistedCheck, (req, res, next) => {
+    return res.status(200).render('register');
 })
 
 router.post("/register", redirectToDashboard, registerLimiter, async(req, res, next) => {
@@ -176,8 +145,6 @@ router.post("/register", redirectToDashboard, registerLimiter, async(req, res, n
         return res.send(`Your IP: ${ip} is blacklisted from using our services, have a good day.`)
     } 
     
-    //if (!req.body) return res.end("Cannot send POST request with empty content.")
-
     let citiesRef = db.collection('users');
     let query = await citiesRef.where('email', '==', req.body.email).get()
         .then(snapshot => {
@@ -216,10 +183,7 @@ router.post("/register", redirectToDashboard, registerLimiter, async(req, res, n
             number.toString(36)
             var id = number.toString(36).substr(2, 9)
             id.length >= 9;
-
-            console.log(id);
             
-
             var json = {}
             json.type = "success";
             json.title = "Your account has been registered.";
@@ -243,7 +207,6 @@ router.post("/register", redirectToDashboard, registerLimiter, async(req, res, n
                 });
             });
 
-           
             sendMail(email, "Welcome to Stress Free Uptime", "p", emailTemplates.register.replace("{{replace}}", firstName))
 
             console.log(`Email: ${req.body.email}. Password: ${req.body.password}.`)
@@ -255,17 +218,15 @@ router.post("/register", redirectToDashboard, registerLimiter, async(req, res, n
 router.post("/logout", redirectToLogin, (req, res, next) => {
     req.session.destroy(err => {
         if (err) {
-            return res.redirect('/dashboard')
+            return res.status(502).redirect('/dashboard');
         }
-
-        res.clearCookie(SESSION_NAME)
-        res.redirect("/login")
+        res.clearCookie(req.session).redirect('/login');
     })
 
 })
 
-router.get("/offers", async(req, res, next) => {
-    res.render("offers")
+router.get("/offers", blacklistedCheck, async(req, res, next) => {
+    return res.status(200).render('offers');
 })
 
 function sendMail(email, subject, body, html="") {
@@ -293,14 +254,42 @@ function sendMail(email, subject, body, html="") {
           console.log(error);
         } else {
           console.log('Email sent: ' + info.response);
-        }
-    })
-}
+        };
+    });
+};
 
-router.get("/admin", adminCheck, (req, res, next) => {
-    res.sendStatus(418)
-})
+router.get("/admin", adminCheck, blacklistedCheck, (req, res, next) => {
+    res.status(200).render('admin');
+});
 
+router.post("/admin", (req, res, next) => {
+    switch (req.body.action) {
+        case 'ban':
+            if (!req.body.email || !req.body.id) return res.status(400).json({ message: 'Insufficient data.' })
+            db.collection('users').doc(req.body.id).update({
+                banned: true
+            })
+            .catch(() => {
+                var json = {}
+                json.type = "error"
+                json.title = "Error Occured."
+                json.message = `Failed to ban user with the given ID: ${req.body.id}.`
+                json.success = false
+    
+                return res.send(JSON.stringify(json))
+            })
+            
+            var json = {}
+            json.type = "success"
+            json.title = "Successfully banned!"
+            json.message = `Banned ID: ${req.body.id}.`
+            return res.send(JSON.stringify(json))
+            break;
+        
+        default:
+            res.status(400).json({ code: 400, body: 'Bad Request' })
+    }
+});
 });
 
 module.exports = router;
