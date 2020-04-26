@@ -1,3 +1,6 @@
+/* Importing Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap');
+
 /* Basic Styling */
 html {
     padding: 0;
@@ -5,7 +8,7 @@ html {
 }
 
 body {
-    background-color: rgba(1, 18, 44, 0.842);
+    background-color: #333;
 }
 
 /* width */
@@ -32,10 +35,8 @@ body {
 
 header {
     width: 100%;
-    background-color: rgb(51, 51, 51);
-    height: 400px;
+    height: 200px;
     margin-top: -20px;
-    outline: 3px solid #fff;
 }
 
 header h1 {
@@ -43,9 +44,11 @@ header h1 {
     z-index: 12;
     top: 0;
     margin-left: 50%;
+    margin-top: -.2px;
+    font-family: 'Montserrat', sans-serif;
     transform: translate(-50%);
-    font-size: 45px;
-    color: white;
+    font-size: 60px;
+    color: rgb(255, 255, 255);
     -webkit-transform: translate(-50%);
     -moz-transform: translate(-50%);
     -ms-transform: translate(-50%);
@@ -56,6 +59,7 @@ nav {
     width: 100%;
     font-size: 26px;
     z-index: 12;
+    background-color: #1f4287;
     position: fixed;
     padding-bottom: 12px;
     transition:500ms ease;
@@ -74,7 +78,7 @@ nav svg {
 }
 
 .scrolled {
-    background-color: rgb(9, 93, 9);
+    background-color: #112f91;
 }
 .scrolled .btn {
     display: none;
@@ -89,13 +93,14 @@ nav svg {
 
 .btn {
     background-color: transparent;
-    outline: 1px solid green;
-    color: white;
+    outline: 2px solid #0c85d6;
+    color: rgb(255, 255, 255);
+    font-size: medium;
 }
 
 .btn:hover {
-    outline: 2px solid rgb(16, 110, 20);
-    color: rgb(23, 231, 86);
+    outline: 2px solid #0eadf7;
+    color: rgb(255, 255, 255);
 }
 
 nav .btn {
@@ -117,8 +122,7 @@ nav :first-child {
 /* Other Styling */
 .title {
     font-size: 60px;
-    background-color: #333;
-    color: rgb(47, 149, 7);
+    color: #278ea5;
     margin-top: -1px;
     text-shadow: 2px 2px 3px rgb(0, 0, 0);
     font-weight: bold;
@@ -127,6 +131,7 @@ nav :first-child {
 /* Container Style */
 
 .container {
+    background-color: #333;
     width: 90%;
     margin-bottom: 4em;
 }
@@ -140,7 +145,8 @@ nav :first-child {
     z-index: 6;
     width: 430px;
     height: 500px;
-    outline: 2px solid rgb(20, 134, 26);
+    background-color: #1f4287;
+    outline: 2px solid #278ea5;
 }
 .textBox-firstElement {
     margin-left: 60px;
@@ -161,9 +167,8 @@ nav :first-child {
     outline-width: 2px;
     text-align: left;
     text-shadow: 2px 2px 3px black;
-    outline-color: white;
     font-weight: bold;
-    color: rgb(144, 142, 3);
+    color: rgb(177, 177, 177);
 }
 
 .devBio {
@@ -181,11 +186,12 @@ nav :first-child {
 /*background-color: rgb(20, 134, 26);*/
 .feature {
     float: left;
-    background-color: #333;
+    background-color: #1f4287;
     margin-right: 8px;
-    padding-top: 40px;
+    padding-top: 20px;
+    margin-top: -11px;
     padding-bottom: 40px;
-    outline: 2px solid rgb(20, 134, 26);
+    outline: 2px solid rgb(16, 110, 218);
     width: 230px;
     height: 300px;
     color: white;
