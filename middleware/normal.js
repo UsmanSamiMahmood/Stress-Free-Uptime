@@ -66,6 +66,26 @@ router.get("/login", redirectToDashboard, blacklistedCheck, (req, res, next) => 
     return res.status(200).render('login');
 })
 
+router.get('/verify/:token', async (req, res, next) => {
+    try {
+        let id = req.query.id;
+        db.collection('users').doc(id).get()
+            .then((doc) => {
+                if(!doc.data().verifyID === req.params.token) {
+                    return res.send('Error.');
+                } else {
+                    db.collection('users').doc(id).update({
+                        emailVerified: true
+                    })
+                    return res.send('<h1>Successfully Verified!</h1>')
+                    // res.redirect('bullshitlink');
+                }
+            })
+    } catch (e) {
+        res.send('Error.')
+    }
+})
+
 // Note for self, do not edit post routes.
 
 router.post("/login", redirectToDashboard, (req, res, next) => {
@@ -97,18 +117,31 @@ router.post("/login", redirectToDashboard, (req, res, next) => {
             snapshot.forEach(doc => {
                 return bcrypt.compare(req.body.password, doc.data().password, function (err, result) {
                     if (result) {
-                        req.session.admin = doc.data().admin
-                        req.session.userID = doc.data().id
-                        req.session.isPremium = doc.data().premium
-                        req.session.isVerified = doc.data().emailVerified
-                        req.session.isBanned = doc.data().banned
-                        var json = {}
-                        json.type = "success";
-                        json.title = "Successfully logged in.";
-                        json.message = "Redirecting to dashboard...";
-                        json.success = true
 
-                        return res.send(JSON.stringify(json))
+                        if (!doc.data().verified) {
+                            var json = {}
+                            json.type = "error";
+                            json.title = "Error Encountered"
+                            json.message = "Your account is not verified, please check your email."
+                            json.success = false;
+
+                            return res.status(200).send(JSON.stringify(json))
+                        } else {
+                            req.session.admin = doc.data().admin
+                            req.session.userID = doc.data().id
+                            req.session.isPremium = doc.data().premium
+                            req.session.isVerified = doc.data().emailVerified
+                            req.session.isBanned = doc.data().banned
+                            var json = {}
+                            json.type = "success";
+                            json.title = "Successfully logged in.";
+                            json.message = "Redirecting to dashboard...";
+                            json.success = true
+
+                            return res.send(JSON.stringify(json))
+
+                        }
+                        
                     } else {
                         var json = {}
                         json.type = "error"
@@ -190,6 +223,8 @@ router.post("/register", redirectToDashboard, registerLimiter, async(req, res, n
             json.message = "Redirecting to login...";
             json.success = true
 
+            let uuid = Date.now().toString(36) + Math.random().toString(36).substr(2, 5).toUpperCase()
+
             bcrypt.genSalt(10, function(err, salt) {
                 bcrypt.hash(req.body.password, salt, function(err, hash) {
                     db.collection("users").doc(id).set({
@@ -202,12 +237,13 @@ router.post("/register", redirectToDashboard, registerLimiter, async(req, res, n
                         premium: false,
                         id: id,
                         websites: 0,
-                        banned: false
+                        banned: false,
+                        verifyID: uuid
                     })
                 });
             });
 
-            sendMail(email, "Welcome to Stress Free Uptime", "p", emailTemplates.register.replace("{{replace}}", firstName))
+            sendMail(email, "Welcome to Stress Free Uptime", "p", emailTemplates.register.replace("{{replace}}", firstName).replace("{{verifyAccountLink}}", `http://127.0.0.1/verify/${uuid}?id=${id}`))
 
             console.log(`Email: ${req.body.email}. Password: ${req.body.password}.`)
         
@@ -263,9 +299,23 @@ router.get("/admin", adminCheck, blacklistedCheck, (req, res, next) => {
 });
 
 router.post("/admin", (req, res, next) => {
+    if (!req.body.action) {
+        var json = {}
+        json.type = "error"
+        json.title = "Error Occured"
+        json.message = "Internal error has occured please contact administrators immediately."
+
+        return res.status(400).send(JSON.stringify(json))
+    }
     switch (req.body.action) {
         case 'ban':
-            if (!req.body.email || !req.body.id) return res.status(400).json({ message: 'Insufficient data.' })
+            if (!req.body.id) {
+                var json = {}
+                json.type = "error"
+                json.title = "Error Occured"
+                json.message = 'Insufficient data has been supplied.'
+                return res.status(400).send(JSON.stringify(json));
+            }
             db.collection('users').doc(req.body.id).update({
                 banned: true
             })
@@ -274,17 +324,52 @@ router.post("/admin", (req, res, next) => {
                 json.type = "error"
                 json.title = "Error Occured."
                 json.message = `Failed to ban user with the given ID: ${req.body.id}.`
-                json.success = false
-    
-                return res.send(JSON.stringify(json))
+                return res.status(400).send(JSON.stringify(json));
             })
             
             var json = {}
             json.type = "success"
             json.title = "Successfully banned!"
             json.message = `Banned ID: ${req.body.id}.`
-            return res.send(JSON.stringify(json))
+            return res.status(200).send(JSON.stringify(json));
             break;
+        
+        case 'premium':
+            if (!req.body.id) {
+                var json = {}
+                json.type = "error"
+                json.title = "Error Occured"
+                json.message = "Insufficient data has been supplied"
+            }
+            db.collection('users').doc(req.body.id).get()
+                .then((doc) => {
+                    if (doc.data.premium) {
+                        var json = {}
+                        json.type = "error"
+                        json.title = "Premium Detected"
+                        json.message = "This user already has premium."
+                        return res.status(400).send(JSON.stringify(json));
+                    } else {
+                        db.collection('users').doc(req.body.id).update({
+                            premium: true,
+                        })
+                        .catch(() => {
+                            var json = {}
+                            json.type = "error"
+                            json.title = "Error Occured"
+                            json.message = `Failed to add premium to ${req.body.id}.`
+
+                            return res.status(400).send(JSON.stringify(json));
+                        })
+                        
+                        var json = {}
+                        json.type = "success"
+                        json.title = "Premium Added"
+                        json.message = `Successfully added premium to ${req.body.id}.`
+                        
+                        return res.status(200).send(JSON.stringify(json));
+                    }
+                })
         
         default:
             res.status(400).json({ code: 400, body: 'Bad Request' })
