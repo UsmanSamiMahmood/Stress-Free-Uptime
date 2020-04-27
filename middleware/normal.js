@@ -55,7 +55,7 @@ const blacklistedCheck = (req, res, next) => {
 }
 router.get("/", blacklistedCheck, (req, res, next) => {
     console.log(req.session)
-    return res.status(200).render('index', { "jonasMail": "jonas.tysbjerg@gmail.com", "jonasDiscord": "♰ R1zeN#0001", "usmanMail": "usmanmahmood2914@protonmail.com", "usmanDiscord": "MrShadow#0001" });
+    return res.status(200).render('index', { "jonasMail": "jonas.tysbjerg@gmail.com", "jonasDiscord": "♰ R1zeN#0001", "usmanMail": "usmanmahmood2914@protonmail.com", "usmanDiscord": "MrShadow#0001", "year": new Date().getFullYear() });
 })
 
 router.get("/dashboard", redirectToLogin, blacklistedCheck, (req, res, next) => {
@@ -89,7 +89,7 @@ router.get('/verify/:token', async (req, res, next) => {
                     req.session.isBanned = doc.data().banned
                     req.session.firstSession = doc.data().firstSession
                     res.send('<h1>Successfully Verified!</h1>')
-                    return res.redirect('/dashboard');
+                    return res.redirect('http://127.0.0.1:80/dashboard');
                 }
             })
     } catch (e) {
