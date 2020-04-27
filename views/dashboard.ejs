@@ -12,6 +12,9 @@
     <% if (firstSession) { %>
     <div class="alert alert-success" role="alert">
       <p>Successfully verified email.</p>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
     </div>
   <% } %>
     <form action="/logout" method="POST">

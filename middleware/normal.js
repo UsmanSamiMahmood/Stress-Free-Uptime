@@ -61,7 +61,7 @@ router.get("/", blacklistedCheck, (req, res, next) => {
 router.get("/dashboard", redirectToLogin, blacklistedCheck, (req, res, next) => {
     res.status(200).render('dashboard', { userAdmin: req.session.admin, firstSession: req.session.firstSession });
     if(req.session.firstSession) {
-       db.collection("users").doc(req.session.id).update({ firstSession: false });
+       db.collection("users").doc(req.session.userID).update({ firstSession: false });
        req.session.firstSession = false 
     }
     

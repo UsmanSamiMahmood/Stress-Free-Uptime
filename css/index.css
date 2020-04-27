@@ -44,10 +44,10 @@ header h1 {
     z-index: 12;
     top: 0;
     margin-left: 50%;
-    margin-top: -.2px;
+    margin-top: 8px;
     font-family: 'Montserrat', sans-serif;
     transform: translate(-50%);
-    font-size: 60px;
+    font-size: 50px;
     color: rgb(255, 255, 255);
     -webkit-transform: translate(-50%);
     -moz-transform: translate(-50%);
@@ -119,6 +119,33 @@ nav :first-child {
     margin-left: 7px;
     float: left;
 }
+
+.dropdown {
+    position: fixed;
+    top: 80px;
+    right: 7px;
+    width: 90%;
+}
+
+.nav-item {
+    float: right;
+    margin-left: 4px;
+    padding: 10px 14px;
+    clear: both;
+    margin-bottom: .9px;
+    outline: .5px solid rgb(189, 187, 187);
+    width: 170px;
+    background-color: rgb(26, 25, 25);
+}
+
+.visibleDropdown {
+    display: block;
+}
+
+.hiddenDropdown {
+    display: none;
+}
+
 /* Other Styling */
 .title {
     font-size: 60px;

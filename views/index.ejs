@@ -13,9 +13,20 @@
             <nav class="nav">
                 <button type="button" class="btn" onclick="location.replace('/register')">Register</button>
                 <button type="button" class="btn loginBtn" onclick="location.replace('/login')">Login</button>
-                <svg onclick="dropdown()" class="hamburger" data-toggle="dropdown" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="bars" class="svg-inline--fa fa-bars fa-w-14" role="img" viewBox="0 0 448 512"><path fill="currentColor" d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg>
+                <svg onclick="toggleDropdown()" class="hamburger" data-toggle="dropdown" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="bars" class="svg-inline--fa fa-bars fa-w-14" role="img" viewBox="0 0 448 512"><path fill="currentColor" d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg>
                 <button class="btn" id="offersButton">Offers </button>
             </nav>
+            <ul class="dropdown" class="nav flex-column">
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Login</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Register</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Offers</a>
+                </li>
+              </ul>
             <h1 id="mainTitle">Stress Free Uptime</h1>
            </center>
         </header>
@@ -105,8 +116,27 @@
     <script>
         $(window).scroll(function(){
             $('nav').toggleClass('scrolled', $(this).scrollTop() > 50);
+            if ($(".dropdown").hasClass("visibleDropdown")) {
+                 $(".dropdown").toggleClass("visibleDropdown")
+                 $(".dropdown").toggleClass("hiddenDropdown")
+            }
+
             //$('#mainTitle').toggleClass('scrolled', $(this).scrollTop() > 50);
         });
+
+        document.body.addEventListener('click', function() {
+            if ($(".dropdown").hasClass("visibleDropdown")) {
+                 $(".dropdown").toggleClass("visibleDropdown")
+                 $(".dropdown").toggleClass("hiddenDropdown")
+            }
+        }, true); 
+
+        $(".dropdown").toggleClass("hiddenDropdown")
+
+        function toggleDropdown() {
+            $(".dropdown").toggleClass("visibleDropdown")
+            $(".dropdown").toggleClass("hiddenDropdown")
+        }
 
         
     </script>
