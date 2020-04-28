@@ -143,6 +143,9 @@ router.post("/login", redirectToDashboard, (req, res, next) => {
                             req.session.isPremium = doc.data().premium
                             req.session.isVerified = doc.data().emailVerified
                             req.session.isBanned = doc.data().banned
+                            req.session.firstName = doc.data().firstName
+                            req.session.lastName = doc.data().lastName
+                            req.session.websites = doc.data().websites
                             req.session.firstSession = doc.data().firstSession
 
                             var json = {}
@@ -309,7 +312,7 @@ function sendMail(email, subject, body, html="") {
 };
 
 router.get("/admin", adminCheck, blacklistedCheck, (req, res, next) => {
-    res.status(200).render('admin');
+    res.status(200).render('admin', { "username": req.session.firstName });
 });
 
 router.post("/admin", (req, res, next) => {
