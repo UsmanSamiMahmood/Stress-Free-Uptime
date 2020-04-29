@@ -232,6 +232,7 @@ router.post("/register", redirectToDashboard, registerLimiter, async(req, res, n
             number.toString(36)
             var id = number.toString(36).substr(2, 9)
             id.length >= 9;
+            var token = number.toString().substr(1, 25)
             
             var json = {}
             json.type = "success";
@@ -255,7 +256,8 @@ router.post("/register", redirectToDashboard, registerLimiter, async(req, res, n
                         websites: 0,
                         firstSession: true,
                         banned: false,
-                        verifyID: uuid
+                        verifyID: uuid,
+                        token: token
                     })
                 });
             });
