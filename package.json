@@ -1,6 +1,6 @@
 {
   "name": "Automatic-Website-Checker",
-  "version": "1.0.0",
+  "version": "1.2.3",
   "description": "Alternate system to use if the website doesn't return 200[OK].\r Use a database and make a website panel.\r Logging.",
   "main": "main.js",
   "scripts": {

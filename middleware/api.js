@@ -44,7 +44,36 @@ router.get("/user", blacklistedCheck, (req, res, next) => {
     }
 })
 
-router.get("/addwebsite", (req, res, next) => {
+// Below is a work in progress addwebsite api route.
+
+/* router.get("/addwebsite", blacklistedCheck, (req, res, next) => {
+    let url = req.query.url;
+    let interval = req.query.interval;
+    let id = req.query.id;
+    let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    ip = ip.split("::ffff:")[1];
+
+    if (!url) {
+        return res.status(400).json({
+            error: 'Please supply a url.'
+        });
+    } else {
+        if (!interval) {
+            return res.status(400).json({
+                error: 'Please supply an interval.'
+            });
+        } else {
+            if (!id) {
+                return res.status(400).json({
+                    error: 'Please supply an account ID.'
+                })
+            }
+            
+        }
+    }
+}) */
+
+/* router.get("/addwebsite", (req, res, next) => {
     let url = req.query.url; let interval = req.query.interval; let premium = req.query.premium;
     let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     ip = ip.split("::ffff:")[1]
@@ -79,7 +108,7 @@ router.get("/addwebsite", (req, res, next) => {
         }
     }
     
-});
+}); */
 
 router.post("/blacklist", (req, res, next) => {
     let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;

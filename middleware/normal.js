@@ -76,9 +76,11 @@ router.get('/verify/:token', async (req, res, next) => {
         let id = req.query.id;
         db.collection('users').doc(id).get()
             .then((doc) => {
+                if (!doc.exists) throw 'error';
                 if(!doc.data().verifyID === req.params.token) {
                     return res.send('Error.');
                 } else {
+                    if (doc.data().emailVerified) return res.status(400).send('<html><head><title>Already Verified</title></head><body bgcolor="white"><center><h1>Already Verified</h1></center><hr><center><a href="/dashboard">Click me to go to dashboard.</a></center></body></html>')
                     db.collection('users').doc(id).update({
                         emailVerified: true
                     })
@@ -88,12 +90,14 @@ router.get('/verify/:token', async (req, res, next) => {
                     req.session.isVerified = doc.data().emailVerified
                     req.session.isBanned = doc.data().banned
                     req.session.firstSession = doc.data().firstSession
-                    res.send('<h1>Successfully Verified!</h1>')
-                    return res.redirect('http://127.0.0.1:80/dashboard');
+                    return res.status(200).send('<html><head><title>Successfully Verified</title></head><body bgcolor="white"><center><h1>Successfully Verified</h1></center><hr><center><a href="/dashboard">Click me to go to dashboard.</a></center></body></html>')
                 }
             })
-    } catch (e) {
-        res.send('Error.')
+            .catch(() => {
+                res.status(400).send(`<html><head><title>Error</title></head><body bgcolor="white"><center><h1>An error has occured.</h1></center><hr><center><a>${req.path} is not a valid path.</a></center><br><center><a href="/">Click me to return to home page.</a></center></body></html>`)
+            })
+    } catch (err) {
+        res.status(400).send(`<html><head><title>Error</title></head><body bgcolor="white"><center><h1>An error has occured.</h1></center><hr><center><a>${req.path} is not a valid path.</a></center><center><a href="/">Click me to return to home page.</a></center></body></html>`)
     }
 })
 
@@ -136,8 +140,19 @@ router.post("/login", redirectToDashboard, (req, res, next) => {
                             json.message = "Your account is not verified, please check your email."
                             json.success = false;
 
-                            return res.status(200).send(JSON.stringify(json))
+                            return res.status(200).send(JSON.stringify(json));
                         } else {
+
+                            if (doc.data().banned) {
+                                var json = {}
+                                json.type = "error"
+                                json.title = "Account Disabled"
+                                json.message = "Your account is banned from using our services."
+                                json.success = false;
+
+                                return res.status(200).send(JSON.stringify(json));
+                            }
+
                             req.session.admin = doc.data().admin
                             req.session.userID = doc.data().id
                             req.session.isPremium = doc.data().premium
