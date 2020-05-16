@@ -54,10 +54,14 @@ app.use(session({
 app.use(express.urlencoded({ extended: false }));
 app.use("/views",express.static(__dirname + "/views"));
 app.use("/css",express.static(__dirname + "/css"));
-app.use("/js",express.static(__dirname + "/js"))
+app.use("/js",express.static(__dirname + "/js"));
 app.use("/", normalRoute);
-app.use("/images",express.static(__dirname + "/images"))
+app.use("/images",express.static(__dirname + "/images"));
 app.use("/api", /*apilimiter,*/ apiRoute);
+
+app.use(function(req, res, next) {
+  return res.status(404).send('<html><head><title>404 Not Found</title></head><body bgcolor="white"><center><h1>404 Not Found</h1></center><hr><center>Stress Free Uptime</center></body></html>')
+});
 
 console.log(figlet.textSync("Stress Free Uptime", {font: 'rectangles'}));
 console.log("\nStress Free Uptime is a service brought to you by Usman Mahmood and Jonas Schiott.");
@@ -67,4 +71,3 @@ console.log("Github:", "https://github.com/UsmanSamiMahmood/Automatic-Website-Ch
 console.log("\nDevelopers: Usman Mahmood & Jonas Schiott".underline.red.bold)
 
 module.exports = app;
-

@@ -8,9 +8,10 @@ const { SESSION_NAME } = require("../app.js");
 const emailTemplates = require("../emailTemplates.json");
 const rateLimit = require("express-rate-limit");
 
+// Middleware which checks if the user is logged in.
 const redirectToLogin = (req, res, next) => {
     if (!req.session.userID) {
-      res.redirect("/login")
+      return res.status(200).redirect("/login")
     } else {
       next()
     }
@@ -18,7 +19,7 @@ const redirectToLogin = (req, res, next) => {
 
 const redirectToDashboard = (req, res, next) => {
     if (req.session.userID) {
-      res.redirect("/dashboard")
+        return res.status(200).redirect("/dashboard");
     } else {
       next()
     }
@@ -28,16 +29,11 @@ const adminCheck = (req, res, next) => {
     if (req.session.admin) {
         next()
     } else {
-        res.status(403)
-        res.redirect("/dashboard")
+        return res.status(403).redirect("/dashboard");
     }
 };
 
-const registerLimiter = rateLimit({
-    windowMs: 60 * 60 * 1000,
-    max: 5,
-    message: "Too many accounts created from your IP, please try again after 1 hour."
-});
+const registerLimiter = rateLimit({ windowMs: 60 * 60 * 1000, max: 5, message: "Too many accounts created from your IP, please try again after 1 hour." });
 
 let location = db.collection("data").doc("permissionCheck")
     .get().then((doc) => {
