@@ -157,6 +157,7 @@ router.post("/login", redirectToDashboard, (req, res, next) => {
                             req.session.lastName = doc.data().lastName
                             req.session.websites = doc.data().websites
                             req.session.firstSession = doc.data().firstSession
+                            req.session.pinAttempts = 0
 
                             var json = {}
                             json.type = "success";
@@ -416,6 +417,12 @@ router.post("/admin", adminCheck, (req, res, next) => {
                         return res.status(200).send(JSON.stringify(json));
                     } else {
                         snapshot.forEach(doc => {
+                            console.log(req.session.pinAttempts)
+                            if (req.session.pinAttempts == 3) {
+                                db.collection("users").doc(doc.data().id).update({
+                                    banned: true
+                                })
+                            }
                             if (doc.data().pin == req.body.pin) {
                                 var json = {}
                                 json.type = "success"
@@ -425,6 +432,7 @@ router.post("/admin", adminCheck, (req, res, next) => {
                                 req.session.pinConfirmed = true;
                                 return res.status(200).send(JSON.stringify(json));
                             } else {
+                                req.session.pinAttempts++
                                 var json = {}
                                 json.type = "error"
                                 json.title = "Incorrect Email/Pin"
