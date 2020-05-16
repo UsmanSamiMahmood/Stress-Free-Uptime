@@ -8,7 +8,11 @@ const { SESSION_NAME } = require("../app.js");
 const emailTemplates = require("../emailTemplates.json");
 const rateLimit = require("express-rate-limit");
 
-// Middleware which checks if the user is logged in.
+/* Middleware which checks if the user is not logged in,
+   if the user is not logged in and tries to access the dashboard;
+   they will be redirected to the login page. 
+*/
+
 const redirectToLogin = (req, res, next) => {
     if (!req.session.userID) {
       return res.status(200).redirect("/login")
@@ -17,6 +21,11 @@ const redirectToLogin = (req, res, next) => {
     }
 }; 
 
+/* Middelware which checks if the user is logged in,
+   if the user is logged in and tries to access the login page;
+   they will be redirected to the dashboard.
+*/
+
 const redirectToDashboard = (req, res, next) => {
     if (req.session.userID) {
         return res.status(200).redirect("/dashboard");
@@ -24,6 +33,11 @@ const redirectToDashboard = (req, res, next) => {
       next()
     }
 };
+
+/* Middelware which checks if the user is an admin when the user attempts to access the admin panel,
+   if the user is not an admin and tries to access the admin panel;
+   they will be redirected to the dashboard.
+*/
 
 const adminCheck = (req, res, next) => {
     if (req.session.admin) {
