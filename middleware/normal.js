@@ -34,10 +34,11 @@ const redirectToDashboard = (req, res, next) => {
     }
 };
 
-/* Middelware which checks if the user is an admin when the user attempts to access the admin panel,
-   if the user is not an admin and tries to access the admin panel;
-   they will be redirected to the dashboard.
-*/
+/** 
+  * Middelware which checks if the user is an admin when the user attempts to access the admin panel,
+  * if the user is not an admin and tries to access the admin panel;
+  * they will be redirected to the dashboard.
+  */
 
 const adminCheck = (req, res, next) => {
     if (req.session.admin) {
