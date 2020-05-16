@@ -21,6 +21,14 @@ body {
     margin-top: 7px;
 }
 
+#adminButton {
+    float: right;
+    margin-right: 7px;
+    height: 40px;
+    width: 110px;
+    margin-top: 7px;
+}
+
 .rounded-corners {
     border-radius: 8px;
     -webkit-border-radius: 8px;

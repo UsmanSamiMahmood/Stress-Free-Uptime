@@ -21,6 +21,9 @@
       <button type="submit" class="logoutButton rounded-corners btn btn-danger" id="logoutButton">Logout</button>
     </form>
     <button class="rounded-corners btn btn-primary" id="myWebsitesButton">My Websites</button>
+    <% if(userAdmin) { %>
+    <button class="rounded-corners btn btn-warning" id ="adminButton">Admin</button>
+    <% } %>
   </nav>
 
   <table>
