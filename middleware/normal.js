@@ -109,20 +109,10 @@ router.get('/verify/:token', async (req, res, next) => {
 // Note for self, do not edit post routes.
 
 router.post("/login", redirectToDashboard, (req, res, next) => {
-    let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    ip = ip.split("::ffff:")[1]
-    if (blackListedIPs.includes(ip)) {
-        var json = {}
-        json.type = "error"
-        json.title = "Error Encountered"
-        json.message = `Your IP: ${ip} is blacklisted from using our services.`
-        json.success = false
 
-        return res.status(502).send(JSON.stringify(json))
-    } else {
-        res.status(200)
-        let citiesRef = db.collection('users');
-        let query = citiesRef.where('email', '==', req.body.email).get()
+    res.status(200)
+    let citiesRef = db.collection('users');
+    let query = citiesRef.where('email', '==', req.body.email).get()
         .then(snapshot => {
             if (snapshot.empty) {
                 var json = {}
@@ -193,7 +183,7 @@ router.post("/login", redirectToDashboard, (req, res, next) => {
         .catch(err => {
             console.log('Error getting documents.', err);
         });
-    }
+    
 })
 
 router.get("/register", redirectToDashboard, (req, res, next) => {
@@ -205,13 +195,15 @@ router.post("/register", redirectToDashboard, registerLimiter, async(req, res, n
 
     console.log(req.body)
 
-    if (!req.body.email) return res.end("Cannot send POST request with empty or insufficient content.")
+    if (!req.body.email) {
 
-    let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    ip = ip.split("::ffff:")[1]
-    if (blackListedIPs.includes(ip)) { 
-        res.status(502); 
-        return res.send(`Your IP: ${ip} is blacklisted from using our services, have a good day.`)
+        var json = {}
+        json.type = "error"
+        json.title = "Account Exists."
+        json.message = "A user with this email already exists."
+        json.success = false
+
+        return res.send(JSON.stringify(json)), global.existAlready = true;
     } 
     
     let citiesRef = db.collection('users');
