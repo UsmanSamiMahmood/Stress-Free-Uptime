@@ -1,3 +1,4 @@
 node_modules/
 secrets/
 process.js
+.vscode/settings.json

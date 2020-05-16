@@ -4,7 +4,7 @@ overflow: hidden;
 }
 
 body {
-    background-color: #F8F9FC;
+    background-color: rgb(92, 92, 92);
     margin: 0;
     padding: 0;
 }
@@ -27,6 +27,7 @@ body {
 
 /* Navbar */
 nav {
+    clear: both;
     height: 100vh;
     width: 250px;
     background-color: #3f3f3f;
@@ -39,8 +40,8 @@ ul {
 li {
     background-color: rgba(11, 125, 218, 0.623);
     height: 50px;
-    color: white;
-    margin-bottom: 7px;
+    color: rgba(255, 255, 255, 0.692);
+    margin-bottom: 15px;
     margin-left: -39px;
     width: 250px;
     padding-top: 5px;
@@ -53,7 +54,7 @@ li {
 }
 
 li:hover {
-    background-color: cadetblue;
+    background-color: rgba(104, 206, 209, 0.753);
     color: black;
 }
 
@@ -62,11 +63,17 @@ li p {
     font-size: larger;
 }
 
+.active-tab {
+    font-weight: bolder;
+    color: white;
+    outline: solid coral 1px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
 /* Site Content */
 .container {
-    background-color: aqua;
-    z-index: 444;
     clear: both;
+    background-color: aqua;
     width: 900px;
     height: 500px;
 }

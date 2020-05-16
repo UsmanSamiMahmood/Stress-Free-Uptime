@@ -17,22 +17,22 @@
   </header>
     <nav>
       <ul>
-        <li>
+        <li id="customise-user" class="active-tab">
           <center>
             <p>User</p>
           </center>
         </li>
-        <li>
+        <li id="blacklist-user">
           <center>
           <p>Blacklist</p>
         </center>
         </li>
-        <li>
+        <li id="premium-user">
           <center>
           <p>Premium</p>
         </center>
         </li>
-        <li>
+        <li id="admin-user">
           <center>
           <p>Admin</p>
         </center>
@@ -46,5 +46,12 @@
           <span class="input-group-text" id="basic-addon3">https://stressfreeuptime.com/users/</span>
         </div>
     </div>
+
+    <script>
+      $("li").on("click", function(e) {
+        $("li").toggleClass("active-tab", false);
+        $(this).toggleClass("active-tab", true);
+      })
+    </script>
 </body>
 </html>
