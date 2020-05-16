@@ -6,7 +6,6 @@ let location = db.collection("data").doc("permissionCheck")
         let blackListedIPs = doc.data().blacklistedIPs
         let authip = doc.data().authip
 
-
 const blacklistedCheck = (req, res, next) => {
     let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     ip = ip.split("::ffff:")[1]
@@ -28,9 +27,7 @@ router.get("/user", blacklistedCheck, (req, res, next) => {
         let loc = db.collection('users').doc(req.session.userID)
             .get().then((doc) => {
                 res.status(200).json({ admin: doc.data().admin, banned: doc.data().false, email:  doc.data().email, emailVerified: doc.data().emailVerified, firstName: doc.data().firstName, lastName: doc.data().lastName, FullName: doc.data().firstName + " " + doc.data().lastName, Premium: doc.data().premium, Websites: doc.data().websites});
-                
             })
-
     } else {
         if (!req.query.id) return res.status(400).json({ error: "ID not specified." })
         let l = db.collection('users').doc(req.query.id)
