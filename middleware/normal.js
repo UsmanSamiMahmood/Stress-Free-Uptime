@@ -326,10 +326,11 @@ function sendMail(email, subject, body, html="") {
 };
 
 router.get("/admin", adminCheck, (req, res, next) => {
+    if (!req.session.pinConfirmed) return res.status(400).send(`<html><head><title>Error</title></head><body bgcolor="white"><center><h1>Pin has not been confirmed.</h1></center><hr><center><a href="/dashboard">Go to dashboard and confirm pin.</a></center><br><center><a href="/">Click me to return to home page.</a></center></body></html>`)
     res.status(200).render('admin', { "username": req.session.firstName });
 });
 
-router.post("/admin", (req, res, next) => {
+router.post("/admin", adminCheck, (req, res, next) => {
     console.log(req.body)
     if (!req.body.action) {
         var json = {}
@@ -421,6 +422,7 @@ router.post("/admin", (req, res, next) => {
                                 json.title = "Authorised"
                                 json.message = "Redirecting to admin panel..."
                                 json.auth = true;
+                                req.session.pinConfirmed = true;
                                 return res.status(200).send(JSON.stringify(json));
                             } else {
                                 var json = {}
