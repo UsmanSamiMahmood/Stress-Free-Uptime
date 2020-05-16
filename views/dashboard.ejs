@@ -22,7 +22,21 @@
     </form>
     <button class="rounded-corners btn btn-primary" id="myWebsitesButton">My Websites</button>
     <% if(userAdmin) { %>
-    <button class="rounded-corners btn btn-warning" id ="adminButton">Admin</button>
+    <button class="rounded-corners btn btn-warning" id ="adminButton" onclick="openForm()">Admin</button>
+    <div class="form-popup" id="myForm">
+      <form action="/admin" class="form-container">
+        <h1>Admin Panel</h1>
+        
+        <label for="email"><b>Email</b></label>
+        <input type="text" placeholder="Enter Email" name="email" id="email" required>
+
+        <label for="pin"><b>Pin</b></label>
+        <input type="password" placeholder="Enter Pin" name="pin" id="pin" required>
+  
+        <button type="submit" class="btn">Access</button>
+        <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+      </form>
+    </div>
     <% } %>
   </nav>
 

@@ -330,6 +330,7 @@ router.get("/admin", adminCheck, (req, res, next) => {
 });
 
 router.post("/admin", (req, res, next) => {
+    console.log(req.body)
     if (!req.body.action) {
         var json = {}
         json.type = "error"
@@ -401,6 +402,44 @@ router.post("/admin", (req, res, next) => {
                         return res.status(200).send(JSON.stringify(json));
                     }
                 })
+                break
+        case 'authorise':
+            let ref = db.collection("users")
+            let query = ref.where("email", "==", req.body.email).get()
+                .then(snapshot => {
+                    if (snapshot.empty) {
+                        var json = {}
+                        json.type = "error"
+                        json.title = "Incorrect Email/Pin"
+                        json.message = "You have supplied an incorrect Email/Pin."
+                        return res.status(200).send(JSON.stringify(json));
+                    } else {
+                        snapshot.forEach(doc => {
+                            if (doc.data().pin == req.body.pin) {
+                                var json = {}
+                                json.type = "success"
+                                json.title = "Authorised"
+                                json.message = "Redirecting to admin panel..."
+                                json.auth = true;
+                                return res.status(200).send(JSON.stringify(json));
+                            } else {
+                                var json = {}
+                                json.type = "error"
+                                json.title = "Incorrect Email/Pin"
+                                json.message = "You have supplied an incorrect Email/Pin."
+                                return res.status(200).send(JSON.stringify(json));
+                            }
+                        })
+                    }
+                })
+            /* var json = {}
+            json.type = "success"
+            json.title = "Success"
+            json.message = `Request recieved!`
+                        
+            return res.status(200).send(JSON.stringify(json)); */
+            break;
+
         
         default:
             res.status(400).json({ code: 400, body: 'Bad Request' })
