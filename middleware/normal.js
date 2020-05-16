@@ -8,10 +8,11 @@ const { SESSION_NAME } = require("../app.js");
 const emailTemplates = require("../emailTemplates.json");
 const rateLimit = require("express-rate-limit");
 
-/* Middleware which checks if the user is not logged in,
-   if the user is not logged in and tries to access the dashboard;
-   they will be redirected to the login page. 
-*/
+/** 
+  * Middleware which checks if the user is not logged in
+  * if the user is not logged in and tries to access the dashboard;
+  * they will be redirected to the login page.
+  */
 
 const redirectToLogin = (req, res, next) => {
     if (!req.session.userID) {
@@ -21,10 +22,11 @@ const redirectToLogin = (req, res, next) => {
     }
 }; 
 
-/* Middelware which checks if the user is logged in,
-   if the user is logged in and tries to access the login page;
-   they will be redirected to the dashboard.
-*/
+/** 
+  * Middelware which checks if the user is logged in,
+  * if the user is logged in and tries to access the login page;
+  * they will be redirected to the dashboard.
+  */
 
 const redirectToDashboard = (req, res, next) => {
     if (req.session.userID) {
@@ -48,28 +50,20 @@ const adminCheck = (req, res, next) => {
     }
 };
 
+/** 
+  * Below we implement a rateLimit which will be used for the POST route of /register,
+  * if the IP that the user is connecting from has made 5 POST requests to the /register route in the last hour;
+  * the user will be prevented from sending more POST requests until the timeout is over.
+  */
+
 const registerLimiter = rateLimit({ windowMs: 60 * 60 * 1000, max: 5, message: "Too many accounts created from your IP, please try again after 1 hour." });
 
-let location = db.collection("data").doc("permissionCheck")
-    .get().then((doc) => {
-        let blackListedIPs = doc.data().blacklistedIPs
-        let authip = doc.data().authip
-
-const blacklistedCheck = (req, res, next) => {
-    let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    ip = ip.split("::ffff:")[1]
-    if (blackListedIPs.includes(ip)) {
-        return res.status(502).send(`Your IP; ${ip} is blacklisted from using our services, have a good day.`)
-    } else {
-        next()
-    }
-}
-router.get("/", blacklistedCheck, (req, res, next) => {
+router.get("/", (req, res, next) => {
     console.log(req.session)
     return res.status(200).render('index', { "jonasMail": "jonas.tysbjerg@gmail.com", "jonasDiscord": "♰ R1zeN#0001", "usmanMail": "usmanmahmood2914@protonmail.com", "usmanDiscord": "MrShadow#0001", "year": new Date().getFullYear() });
 })
 
-router.get("/dashboard", redirectToLogin, blacklistedCheck, (req, res, next) => {
+router.get("/dashboard", redirectToLogin, (req, res, next) => {
     res.status(200).render('dashboard', { userAdmin: req.session.admin, firstSession: req.session.firstSession });
     if(req.session.firstSession) {
        db.collection("users").doc(req.session.userID).update({ firstSession: false });
@@ -78,7 +72,7 @@ router.get("/dashboard", redirectToLogin, blacklistedCheck, (req, res, next) => 
     
 })
 
-router.get("/login", redirectToDashboard, blacklistedCheck, (req, res, next) => {
+router.get("/login", redirectToDashboard, (req, res, next) => {
     return res.status(200).render('login');
 })
 
@@ -202,7 +196,7 @@ router.post("/login", redirectToDashboard, (req, res, next) => {
     }
 })
 
-router.get("/register", redirectToDashboard, blacklistedCheck, (req, res, next) => {
+router.get("/register", redirectToDashboard, (req, res, next) => {
     return res.status(200).render('register');
 })
 
@@ -306,7 +300,7 @@ router.post("/logout", redirectToLogin, (req, res, next) => {
 
 })
 
-router.get("/offers", blacklistedCheck, async(req, res, next) => {
+router.get("/offers", async(req, res, next) => {
     return res.status(200).render('offers');
 })
 
@@ -339,7 +333,7 @@ function sendMail(email, subject, body, html="") {
     });
 };
 
-router.get("/admin", adminCheck, blacklistedCheck, (req, res, next) => {
+router.get("/admin", adminCheck, (req, res, next) => {
     res.status(200).render('admin', { "username": req.session.firstName });
 });
 
@@ -419,7 +413,6 @@ router.post("/admin", (req, res, next) => {
         default:
             res.status(400).json({ code: 400, body: 'Bad Request' })
     }
-});
 });
 
 module.exports = router;
