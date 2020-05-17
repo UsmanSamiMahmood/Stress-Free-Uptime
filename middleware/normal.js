@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
-const { db } = require("../database/handler");
+const mongoose = require("mongoose");
+const User = require("../database/models/User");
 const nodemailer = require('nodemailer');
 const { emailPassword } = require("../secrets/config.json");
 const { SESSION_NAME } = require("../app.js");
@@ -66,6 +67,7 @@ router.get("/", (req, res, next) => {
 router.get("/dashboard", redirectToLogin, (req, res, next) => {
     res.status(200).render('dashboard', { userAdmin: req.session.admin, firstSession: req.session.firstSession });
     if(req.session.firstSession) {
+        User.findOne({ Em })
        db.collection("users").doc(req.session.userID).update({ firstSession: false });
        req.session.firstSession = false 
     }
@@ -82,19 +84,19 @@ router.get('/verify/:token', async (req, res, next) => {
         db.collection('users').doc(id).get()
             .then((doc) => {
                 if (!doc.exists) throw 'error';
-                if(!doc.data().verifyID === req.params.token) {
+                if(!data.verifyID === req.params.token) {
                     return res.send('Error.');
                 } else {
-                    if (doc.data().emailVerified) return res.status(400).send('<html><head><title>Already Verified</title></head><body bgcolor="white"><center><h1>Already Verified</h1></center><hr><center><a href="/dashboard">Click me to go to dashboard.</a></center></body></html>')
+                    if (data.emailVerified) return res.status(400).send('<html><head><title>Already Verified</title></head><body bgcolor="white"><center><h1>Already Verified</h1></center><hr><center><a href="/dashboard">Click me to go to dashboard.</a></center></body></html>')
                     db.collection('users').doc(id).update({
                         emailVerified: true
                     })
-                    req.session.admin = doc.data().admin
-                    req.session.userID = doc.data().id
-                    req.session.isPremium = doc.data().premium
-                    req.session.isVerified = doc.data().emailVerified
-                    req.session.isBanned = doc.data().banned
-                    req.session.firstSession = doc.data().firstSession
+                    req.session.admin = data.admin
+                    req.session.userID = data.id
+                    req.session.isPremium = data.premium
+                    req.session.isVerified = data.emailVerified
+                    req.session.isBanned = data.banned
+                    req.session.firstSession = data.firstSession
                     return res.status(200).send('<html><head><title>Successfully Verified</title></head><body bgcolor="white"><center><h1>Successfully Verified</h1></center><hr><center><a href="/dashboard">Click me to go to dashboard.</a></center></body></html>')
                 }
             })
@@ -109,6 +111,80 @@ router.get('/verify/:token', async (req, res, next) => {
 // Note for self, do not edit post routes.
 
 router.post("/login", redirectToDashboard, (req, res, next) => {
+    User.findOne({ Email: req.body.email }), async(err, data) => {
+        if (err) console.error(err);
+        
+        if (data) {
+            bcrypt.compare(req.body.password, data.password, function (err, result) {
+                if(data.Banned) {
+                    var json = {}
+                    json.type = "error"
+                    json.title = "Account Disabled"
+                    json.message = "Your account is banned from using our services."
+                    json.success = false;
+
+                    return res.status(200).send(JSON.stringify(json));
+                } else if(!data.EmailVerified) {
+                    var json = {}
+                    json.type = "error";
+                    json.title = "Error Encountered"
+                    json.message = "Your account is not verified, please check your email."
+                    json.success = false;
+
+                    return res.status(200).send(JSON.stringify(json));
+                } else {
+                    if (req.body.password !== result) {
+                        var json = {}
+                        json.type = "error"
+                        json.title = "Error Encountered"
+                        json.message = "Incorrect email or password."
+                        json.success = false
+
+                        return res.send(JSON.stringify(json))
+                    }
+                    req.session.admin = data.Admin
+                    req.session.userID = data.UserID
+                    req.session.isPremium = data.Premium
+                    req.session.isVerified = data.EmailVerified
+                    req.session.isBanned = data.Banned
+                    req.session.firstName = data.FirstName
+                    req.session.lastName = data.LastName
+                    req.session.websites = data.Websites
+                    req.session.firstSession = data.FirstSession
+                    req.session.pinAttempts = 0
+
+                    var json = {}
+                    json.type = "success";
+                    json.title = "Successfully logged in.";
+                    json.message = "Redirecting to dashboard...";
+                    json.success = true
+    
+                    return res.send(JSON.stringify(json))
+                }
+
+            })
+        } else {
+            var json = {}
+            json.type = "error"
+            json.title = "Error Encountered"
+            json.message = "Incorrect email or password."
+            json.success = false
+
+            return res.send(JSON.stringify(json))
+        }
+    }
+}
+    
+    
+    
+
+    var json = {}
+    json.type = "success";
+    json.title = "Successfully logged in.";
+    json.message = "Redirecting to dashboard...";
+    json.success = true
+
+    return res.send(JSON.stringify(json))
 
     res.status(200)
     let citiesRef = db.collection('users');
@@ -125,10 +201,10 @@ router.post("/login", redirectToDashboard, (req, res, next) => {
             }  
 
             snapshot.forEach(doc => {
-                return bcrypt.compare(req.body.password, doc.data().password, function (err, result) {
+                return bcrypt.compare(req.body.password, data.password, function (err, result) {
                     if (result) {
 
-                        if (!doc.data().emailVerified) {
+                        if (!data.emailVerified) {
                             var json = {}
                             json.type = "error";
                             json.title = "Error Encountered"
@@ -138,7 +214,7 @@ router.post("/login", redirectToDashboard, (req, res, next) => {
                             return res.status(200).send(JSON.stringify(json));
                         } else {
 
-                            if (doc.data().banned) {
+                            if (data.banned) {
                                 var json = {}
                                 json.type = "error"
                                 json.title = "Account Disabled"
@@ -148,24 +224,7 @@ router.post("/login", redirectToDashboard, (req, res, next) => {
                                 return res.status(200).send(JSON.stringify(json));
                             }
 
-                            req.session.admin = doc.data().admin
-                            req.session.userID = doc.data().id
-                            req.session.isPremium = doc.data().premium
-                            req.session.isVerified = doc.data().emailVerified
-                            req.session.isBanned = doc.data().banned
-                            req.session.firstName = doc.data().firstName
-                            req.session.lastName = doc.data().lastName
-                            req.session.websites = doc.data().websites
-                            req.session.firstSession = doc.data().firstSession
-                            req.session.pinAttempts = 0
-
-                            var json = {}
-                            json.type = "success";
-                            json.title = "Successfully logged in.";
-                            json.message = "Redirecting to dashboard...";
-                            json.success = true
-
-                            return res.send(JSON.stringify(json))
+                        
 
                         }
                         
@@ -192,96 +251,74 @@ router.get("/register", redirectToDashboard, (req, res, next) => {
 })
 
 router.post("/register", redirectToDashboard, registerLimiter, async(req, res, next) => {
-    global.existAlready = false;
+    let email = req.body.email
+    let password = req.body.password
+    let firstName = req.body.firstName
+    let lastName = req.body.lastName
+    var number = Math.random()
+    number.toString(36)
+    var id = number.toString(36).substr(2, 9)
+    id.length >= 9;
+    var token = number.toString().substr(1, 25)
+            
+    var json = {}
+    json.type = "success";
+    json.title = "Your account has been registered.";
+    json.message = "Redirecting to login...";
+    json.success = true
 
-    console.log(req.body)
+    let uuid = Date.now().toString(36) + Math.random().toString(36).substr(2, 5).toUpperCase()
 
-    if (!req.body.email) {
-
+    if (req.body.password != req.body.passwordConfirm) {
         var json = {}
         json.type = "error"
-        json.title = "Account Exists."
-        json.message = "A user with this email already exists."
+        json.title = "Passwords do not match."
+        json.message = "Please make sure passwords match before submitting."
         json.success = false
 
-        return res.send(JSON.stringify(json)), global.existAlready = true;
+        return res.send(JSON.stringify(json))
     } 
-    
-    let citiesRef = db.collection('users');
-    let query = await citiesRef.where('email', '==', req.body.email).get()
-        .then(snapshot => {
-            if (!snapshot.empty) {
-                console.log("Activated")
-                throw "found"
-            }        
-        })
-        .catch(() => {
-            console.log("Activated 2")
+
+    User.findOne({ Email: email }),async(err, data) => {
+        if(err) console.error(err);
+        if (data) {
             var json = {}
             json.type = "error"
             json.title = "Account Exists."
             json.message = "A user with this email already exists."
             json.success = false
 
-            return res.send(JSON.stringify(json)), global.existAlready = true;
-        })
-        
-        if (req.body.password != req.body.passwordConfirm) {
-            var json = {}
-            json.type = "error"
-            json.title = "Passwords do not match."
-            json.message = "Please make sure passwords match before submitting."
-            json.success = false
-
             return res.send(JSON.stringify(json))
-        } 
-        if (req.body.password == req.body.passwordConfirm) {
-            if (global.existAlready) return;
-            let email = req.body.email
-            let password = req.body.password
-            let firstName = req.body.firstName
-            let lastName = req.body.lastName
-            var number = Math.random()
-            number.toString(36)
-            var id = number.toString(36).substr(2, 9)
-            id.length >= 9;
-            var token = number.toString().substr(1, 25)
-            
-            var json = {}
-            json.type = "success";
-            json.title = "Your account has been registered.";
-            json.message = "Redirecting to login...";
-            json.success = true
-
-            let uuid = Date.now().toString(36) + Math.random().toString(36).substr(2, 5).toUpperCase()
-
+        } else {
             bcrypt.genSalt(10, function(err, salt) {
-                bcrypt.hash(req.body.password, salt, function(err, hash) {
-                    db.collection("users").doc(id).set({
-                        email: email,
-                        firstName: firstName,
-                        lastName: lastName,
-                        password: hash,
-                        emailVerified: false,
-                        admin: false,
-                        premium: false,
-                        id: id,
-                        websites: 0,
+                bcrypt.hash(password, salt, function(err, hash) {
+                    new User({
+                        Admin: false,
+                        Banned: false,
+                        Email: email,
+                        EmailVerified: false,
+                        FirstName: firstName,
+                        LastName: lastName,
                         firstSession: true,
-                        banned: false,
-                        verifyID: uuid,
-                        token: token
-                    })
+                        Id: id,
+                        Password: hash,
+                        Token: token,
+                        VerifyID: uuid,
+                        Websites: [""],
+                        Premium: false
+                    }).save();
                 });
             });
-
-            sendMail(email, "Welcome to Stress Free Uptime", "p", emailTemplates.register.replace("{{replace}}", firstName).replace("{{verifyAccountLink}}", `http://127.0.0.1/verify/${uuid}?id=${id}`))
-
-            console.log(`Email: ${req.body.email}. Password: ${req.body.password}.`)
-        
-            return res.end(JSON.stringify(json))
         }
-})
+    }
+   
+
+        sendMail(email, "Welcome to Stress Free Uptime", "p", emailTemplates.register.replace("{{replace}}", firstName).replace("{{verifyAccountLink}}", `http://127.0.0.1/verify/${uuid}?id=${id}`))
+
+        console.log(`Email: ${req.body.email}. Password: ${req.body.password}.`)
+        
+        return res.end(JSON.stringify(json))
+    });
 
 router.post("/logout", redirectToLogin, (req, res, next) => {
     req.session.destroy(err => {
@@ -419,11 +456,11 @@ router.post("/admin", adminCheck, (req, res, next) => {
                         snapshot.forEach(doc => {
                             console.log(req.session.pinAttempts)
                             if (req.session.pinAttempts == 3) {
-                                db.collection("users").doc(doc.data().id).update({
+                                db.collection("users").doc(data.id).update({
                                     banned: true
                                 })
                             }
-                            if (doc.data().pin == req.body.pin) {
+                            if (data.pin == req.body.pin) {
                                 var json = {}
                                 json.type = "success"
                                 json.title = "Authorised"
