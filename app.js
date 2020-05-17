@@ -10,8 +10,15 @@ const normalRoute = require("./middleware/normal");
 const apiRoute = require("./middleware/api")
 const bcrypt = require("bcrypt");
 const session = require("express-session");
-const time = 1000 * 60 * 60 * 2
-const { db } = require("./database/handler.js");
+const time = 1000 * 60 * 60 * 2;
+
+const { mongoPass } = require("./secrets/config.json");
+
+const mongoose = require("mongoose");
+mongoose.connect("mongodb+srv://Admin:"+mongoPass+"@cluster0-rnobt.mongodb.net/data?retryWrites=true&w=majority", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
 
 function makeId() {
   var number = Math.random()
