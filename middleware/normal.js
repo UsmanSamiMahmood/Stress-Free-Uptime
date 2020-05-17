@@ -81,30 +81,26 @@ router.get("/login", redirectToDashboard, (req, res, next) => {
 router.get('/verify/:token', async (req, res, next) => {
     try {
         let id = req.query.id;
-        db.collection('users').doc(id).get()
-            .then((doc) => {
-                if (!doc.exists) throw 'error';
-                if(!data.verifyID === req.params.token) {
-                    return res.send('Error.');
-                } else {
-                    if (data.emailVerified) return res.status(400).send('<html><head><title>Already Verified</title></head><body bgcolor="white"><center><h1>Already Verified</h1></center><hr><center><a href="/dashboard">Click me to go to dashboard.</a></center></body></html>')
-                    db.collection('users').doc(id).update({
-                        emailVerified: true
-                    })
-                    req.session.admin = data.admin
-                    req.session.userID = data.id
-                    req.session.isPremium = data.premium
-                    req.session.isVerified = data.emailVerified
-                    req.session.isBanned = data.banned
-                    req.session.firstSession = data.firstSession
-                    return res.status(200).send('<html><head><title>Successfully Verified</title></head><body bgcolor="white"><center><h1>Successfully Verified</h1></center><hr><center><a href="/dashboard">Click me to go to dashboard.</a></center></body></html>')
-                }
-            })
-            .catch(() => {
-                res.status(400).send(`<html><head><title>Error</title></head><body bgcolor="white"><center><h1>An error has occured.</h1></center><hr><center><a>${req.path} is not a valid path.</a></center><br><center><a href="/">Click me to return to home page.</a></center></body></html>`)
-            })
-    } catch (err) {
-        res.status(400).send(`<html><head><title>Error</title></head><body bgcolor="white"><center><h1>An error has occured.</h1></center><hr><center><a>${req.path} is not a valid path.</a></center><center><a href="/">Click me to return to home page.</a></center></body></html>`)
+        User.findOne({ Id: id }), async(err, data) => {
+            if (err) console.error(err);
+
+            if (!data) throw "error";
+            if (!data.VerifyID === req.params.token) {
+                return res.status(200).send("Error");
+            } else {
+                if (data.EmailVerified) return res.status(400).send('<html><head><title>Already Verified</title></head><body bgcolor="white"><center><h1>Already Verified</h1></center><hr><center><a href="/dashboard">Click me to go to dashboard.</a></center></body></html>');
+                User.updateOne({ Id: id }), { EmailVerified: true };
+                req.session.admin = data.admin
+                req.session.userID = data.id
+                req.session.isPremium = data.premium
+                req.session.isVerified = data.emailVerified
+                req.session.isBanned = data.banned
+                req.session.firstSession = data.firstSession
+                return res.status(200).send('<html><head><title>Successfully Verified</title></head><body bgcolor="white"><center><h1>Successfully Verified</h1></center><hr><center><a href="/dashboard">Click me to go to dashboard.</a></center></body></html>')
+            }
+        }
+    } catch(e) {
+        res.status(400).send(`<html><head><title>Error</title></head><body bgcolor="white"><center><h1>An error has occured.</h1></center><hr><center><a>${req.path} is not a valid path.</a></center><br><center><a href="/">Click me to return to home page.</a></center></body></html>`)
     }
 })
 
@@ -173,79 +169,8 @@ router.post("/login", redirectToDashboard, (req, res, next) => {
             return res.send(JSON.stringify(json))
         }
     }
-}
-    
-    
-    
-
-    var json = {}
-    json.type = "success";
-    json.title = "Successfully logged in.";
-    json.message = "Redirecting to dashboard...";
-    json.success = true
-
-    return res.send(JSON.stringify(json))
-
-    res.status(200)
-    let citiesRef = db.collection('users');
-    let query = citiesRef.where('email', '==', req.body.email).get()
-        .then(snapshot => {
-            if (snapshot.empty) {
-                var json = {}
-                json.type = "error"
-                json.title = "Error Encountered"
-                json.message = "This user isn't registered."
-                json.success = false
-
-                return res.send(JSON.stringify(json))
-            }  
-
-            snapshot.forEach(doc => {
-                return bcrypt.compare(req.body.password, data.password, function (err, result) {
-                    if (result) {
-
-                        if (!data.emailVerified) {
-                            var json = {}
-                            json.type = "error";
-                            json.title = "Error Encountered"
-                            json.message = "Your account is not verified, please check your email."
-                            json.success = false;
-
-                            return res.status(200).send(JSON.stringify(json));
-                        } else {
-
-                            if (data.banned) {
-                                var json = {}
-                                json.type = "error"
-                                json.title = "Account Disabled"
-                                json.message = "Your account is banned from using our services."
-                                json.success = false;
-
-                                return res.status(200).send(JSON.stringify(json));
-                            }
-
-                        
-
-                        }
-                        
-                    } else {
-                        var json = {}
-                        json.type = "error"
-                        json.title = "Error Encountered"
-                        json.message = "Incorrect email or password."
-                        json.success = false
-
-                        return res.send(JSON.stringify(json))
-                    }
-                });
-            });
-        })
-        .catch(err => {
-            console.log('Error getting documents.', err);
-        });
-    
 })
-
+    
 router.get("/register", redirectToDashboard, (req, res, next) => {
     return res.status(200).render('register');
 })
@@ -412,36 +337,56 @@ router.post("/admin", adminCheck, (req, res, next) => {
                 json.title = "Error Occured"
                 json.message = "Insufficient data has been supplied"
             }
-            db.collection('users').doc(req.body.id).get()
-                .then((doc) => {
-                    if (doc.data.premium) {
+
+            User.findOne({ Id: req.body.id }), async(err, data) => {
+                if (err) console.error(err);
+
+                if (!data) {
+                    var json = {}
+                    json.type = "error"
+                    json.title = "Error Occured"
+                    json.message = "User doesn't exist."
+
+                    return res.status(400).send(JSON.stringify(json));
+                } else {
+                    if (data.Premium) {
                         var json = {}
                         json.type = "error"
                         json.title = "Premium Detected"
                         json.message = "This user already has premium."
                         return res.status(400).send(JSON.stringify(json));
                     } else {
-                        db.collection('users').doc(req.body.id).update({
-                            premium: true,
-                        })
-                        .catch(() => {
-                            var json = {}
-                            json.type = "error"
-                            json.title = "Error Occured"
-                            json.message = `Failed to add premium to ${req.body.id}.`
-
-                            return res.status(400).send(JSON.stringify(json));
-                        })
-                        
-                        var json = {}
-                        json.type = "success"
-                        json.title = "Premium Added"
-                        json.message = `Successfully added premium to ${req.body.id}.`
-                        
-                        return res.status(200).send(JSON.stringify(json));
+                        User.updateOne({ Id: req.body.id }), { Premium: true }
                     }
-                })
-                break
+                }
+                
+            }
+            
+            if (data.premium) {
+                var json = {}
+                json.type = "error"
+                json.title = "Premium Detected"
+                json.message = "This user already has premium."
+                return res.status(400).send(JSON.stringify(json));
+            } else {
+                try {
+                    User.updateOne({ Id: req.body.id }), { Premium: true }
+                } catch {
+                    var json = {}
+                    json.type = "error"
+                    json.title = "Error Occured"
+                    json.message = `Failed to add premium to ${req.body.id}.`
+
+                    return res.status(400).send(JSON.stringify(json));
+                }
+
+                var json = {}
+                json.type = "success"
+                json.title = "Premium Added"
+                json.message = `Successfully added premium to ${req.body.id}.`
+                        
+                return res.status(200).send(JSON.stringify(json));
+            }
         case 'authorise':
             let ref = db.collection("users")
             let query = ref.where("email", "==", req.body.email).get()
