@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const User = require("../database/models/User");
+User
 let location = db.collection("data").doc("permissionCheck")
     .get().then((doc) => {
         let blackListedIPs = doc.data().blacklistedIPs

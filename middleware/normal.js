@@ -332,107 +332,105 @@ router.post("/admin", adminCheck, (req, res, next) => {
         
         case 'premium':
             if (!req.body.id) {
-                var json = {}
-                json.type = "error"
-                json.title = "Error Occured"
-                json.message = "Insufficient data has been supplied"
+                var json = {};
+                json.type = "error";
+                json.title = "Error Occured";
+                json.message = "Insufficient data has been supplied";
             }
 
             User.findOne({ Id: req.body.id }), async(err, data) => {
                 if (err) console.error(err);
 
                 if (!data) {
-                    var json = {}
-                    json.type = "error"
-                    json.title = "Error Occured"
-                    json.message = "User doesn't exist."
+                    var json = {};
+                    json.type = "error";
+                    json.title = "Error Occured";
+                    json.message = "User doesn't exist.";
 
                     return res.status(400).send(JSON.stringify(json));
                 } else {
                     if (data.Premium) {
-                        var json = {}
-                        json.type = "error"
-                        json.title = "Premium Detected"
-                        json.message = "This user already has premium."
+                        var json = {};
+                        json.type = "error";
+                        json.title = "Premium Detected";
+                        json.message = "This user already has premium.";
                         return res.status(400).send(JSON.stringify(json));
                     } else {
-                        User.updateOne({ Id: req.body.id }), { Premium: true }
+                        User.updateOne({ Id: req.body.id }), { Premium: true };
                     }
                 }
-                
             }
             
             if (data.premium) {
-                var json = {}
-                json.type = "error"
-                json.title = "Premium Detected"
-                json.message = "This user already has premium."
+                var json = {};
+                json.type = "error";
+                json.title = "Premium Detected";
+                json.message = "This user already has premium.";
                 return res.status(400).send(JSON.stringify(json));
             } else {
                 try {
-                    User.updateOne({ Id: req.body.id }), { Premium: true }
+                    User.updateOne({ Id: req.body.id }), { Premium: true };
                 } catch {
-                    var json = {}
-                    json.type = "error"
-                    json.title = "Error Occured"
-                    json.message = `Failed to add premium to ${req.body.id}.`
+                    var json = {};
+                    json.type = "error";
+                    json.title = "Error Occured";
+                    json.message = `Failed to add premium to ${req.body.id}.`;
 
                     return res.status(400).send(JSON.stringify(json));
                 }
 
-                var json = {}
-                json.type = "success"
-                json.title = "Premium Added"
-                json.message = `Successfully added premium to ${req.body.id}.`
+                var json = {};
+                json.type = "success";
+                json.title = "Premium Added";
+                json.message = `Successfully added premium to ${req.body.id}.`;
                         
                 return res.status(200).send(JSON.stringify(json));
             }
         case 'authorise':
-            let ref = db.collection("users")
-            let query = ref.where("email", "==", req.body.email).get()
-                .then(snapshot => {
-                    if (snapshot.empty) {
-                        var json = {}
-                        json.type = "error"
-                        json.title = "Incorrect Email/Pin"
-                        json.message = "You have supplied an incorrect Email/Pin."
+            User.findOne({ Email: req.body.email }), async(err, data) => {
+                if (err) console.error(err);
+
+                if (!data) {
+                    var json = {}
+                    json.type = "error"
+                    json.title = "User not found"
+                    json.message = "The is no user with this email registered."
+                    return res.status(200).send(JSON.stringify(json));
+                }
+
+                if (data) {
+                    if (!data.Admin) {
+                        var json = {};
+                        json.type = "error";
+                        json.title = "User not admin";
+                        json.message = "This user isn't an administrator.";
+                        return res.status(200).send(JSON.stringify(json));
+                    }
+                    if (data.Pin === req.body.pin) {
+                        var json = {};
+                        json.type = "success";
+                        json.title = "Authorised";
+                        json.message = "Redirecting to admin panel...";
+                        json.auth = true;
+                        req.session.pinConfirmed = true;
                         return res.status(200).send(JSON.stringify(json));
                     } else {
-                        snapshot.forEach(doc => {
-                            console.log(req.session.pinAttempts)
-                            if (req.session.pinAttempts == 3) {
-                                db.collection("users").doc(data.id).update({
-                                    banned: true
-                                })
-                            }
-                            if (data.pin == req.body.pin) {
-                                var json = {}
-                                json.type = "success"
-                                json.title = "Authorised"
-                                json.message = "Redirecting to admin panel..."
-                                json.auth = true;
-                                req.session.pinConfirmed = true;
-                                return res.status(200).send(JSON.stringify(json));
-                            } else {
-                                req.session.pinAttempts++
-                                var json = {}
-                                json.type = "error"
-                                json.title = "Incorrect Email/Pin"
-                                json.message = "You have supplied an incorrect Email/Pin."
-                                return res.status(200).send(JSON.stringify(json));
-                            }
-                        })
-                    }
-                })
-            /* var json = {}
-            json.type = "success"
-            json.title = "Success"
-            json.message = `Request recieved!`
-                        
-            return res.status(200).send(JSON.stringify(json)); */
-            break;
+                        req.session.pinAttempts++
+                        if (req.session.pinAttempts >= 3) {
+                            User.updateOne({ Email: req.body.email }), { Banned: true };
+                        }
+                        var json = {};
+                        json.type = "error";
+                        json.title = "Incorrect Email/Pin";
+                        json.message = "You have supplied an incorrect Email/Pin.";
+                        return res.status(200).send(JSON.stringify(json));;
+                }
+            }
 
-        
+
+            }
+            break;
+                    
         default:
             res.status(400).json({ code: 400, body: 'Bad Request' })
     }
