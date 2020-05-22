@@ -59,17 +59,17 @@ app.use(session({
 }))
 
 const blacklistedCheck = (req, res, next) => {
-  let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+ /* let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
   ip = ip.split("::ffff:")[1]
   db.collection("data").doc("permissionCheck")
     .get().then((doc) => {
       let ips = doc.data().blacklistedIPs
       if (ips.includes(ip)) {
         return res.status(502).send(`Your IP; ${ip} is blacklisted from using our services, have a good day.`)
-      } else {
+      } else {*/
         next()
-      }
-    })
+     // }
+   // })
 }
 
 app.use(express.urlencoded({ extended: false }));

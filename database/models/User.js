@@ -1,4 +1,4 @@
-const { Schema } = require("mongoose");
+const { Schema, model } = require("mongoose");
 const UserSchema = new Schema({
     Admin: Boolean,
     Banned: Boolean,
@@ -17,4 +17,4 @@ const UserSchema = new Schema({
     Premium: Boolean,
 });
 
-module.exports = mongoose.model("user", UserSchema);
+module.exports = model("user", UserSchema);

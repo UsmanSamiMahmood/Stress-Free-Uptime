@@ -67,7 +67,7 @@ router.get("/", (req, res, next) => {
 router.get("/dashboard", redirectToLogin, (req, res, next) => {
     res.status(200).render('dashboard', { userAdmin: req.session.admin, firstSession: req.session.firstSession });
     if(req.session.firstSession) {
-        User.findOne({ Em })
+       User.updateOne({ Email: req.session.email }, { FirstSession: false })
        db.collection("users").doc(req.session.userID).update({ firstSession: false });
        req.session.firstSession = false 
     }
@@ -81,7 +81,7 @@ router.get("/login", redirectToDashboard, (req, res, next) => {
 router.get('/verify/:token', async (req, res, next) => {
     try {
         let id = req.query.id;
-        User.findOne({ Id: id }), async(err, data) => {
+        User.findOne({ Id: id }, async(err, data) => {
             if (err) console.error(err);
 
             if (!data) throw "error";
@@ -89,7 +89,7 @@ router.get('/verify/:token', async (req, res, next) => {
                 return res.status(200).send("Error");
             } else {
                 if (data.EmailVerified) return res.status(400).send('<html><head><title>Already Verified</title></head><body bgcolor="white"><center><h1>Already Verified</h1></center><hr><center><a href="/dashboard">Click me to go to dashboard.</a></center></body></html>');
-                User.updateOne({ Id: id }), { EmailVerified: true };
+                User.updateOne({ Id: id }, { EmailVerified: true });
                 req.session.admin = data.admin
                 req.session.userID = data.id
                 req.session.isPremium = data.premium
@@ -98,16 +98,15 @@ router.get('/verify/:token', async (req, res, next) => {
                 req.session.firstSession = data.firstSession
                 return res.status(200).send('<html><head><title>Successfully Verified</title></head><body bgcolor="white"><center><h1>Successfully Verified</h1></center><hr><center><a href="/dashboard">Click me to go to dashboard.</a></center></body></html>')
             }
-        }
+        })
     } catch(e) {
         res.status(400).send(`<html><head><title>Error</title></head><body bgcolor="white"><center><h1>An error has occured.</h1></center><hr><center><a>${req.path} is not a valid path.</a></center><br><center><a href="/">Click me to return to home page.</a></center></body></html>`)
     }
 })
 
 // Note for self, do not edit post routes.
-
 router.post("/login", redirectToDashboard, (req, res, next) => {
-    User.findOne({ Email: req.body.email }), async(err, data) => {
+    User.findOne({ Email: req.body.email }, async(err, data) => {
         if (err) console.error(err);
         
         if (data) {
@@ -119,7 +118,7 @@ router.post("/login", redirectToDashboard, (req, res, next) => {
                     json.message = "Your account is banned from using our services."
                     json.success = false;
 
-                    return res.status(200).send(JSON.stringify(json));
+                    return res.status(200).end(JSON.stringify(json));
                 } else if(!data.EmailVerified) {
                     var json = {}
                     json.type = "error";
@@ -127,7 +126,7 @@ router.post("/login", redirectToDashboard, (req, res, next) => {
                     json.message = "Your account is not verified, please check your email."
                     json.success = false;
 
-                    return res.status(200).send(JSON.stringify(json));
+                    return res.status(200).end(JSON.stringify(json));
                 } else {
                     if (req.body.password !== result) {
                         var json = {}
@@ -136,7 +135,7 @@ router.post("/login", redirectToDashboard, (req, res, next) => {
                         json.message = "Incorrect email or password."
                         json.success = false
 
-                        return res.send(JSON.stringify(json))
+                        return res.end(JSON.stringify(json))
                     }
                     req.session.admin = data.Admin
                     req.session.userID = data.UserID
@@ -155,9 +154,8 @@ router.post("/login", redirectToDashboard, (req, res, next) => {
                     json.message = "Redirecting to dashboard...";
                     json.success = true
     
-                    return res.send(JSON.stringify(json))
+                    return res.end(JSON.stringify(json))
                 }
-
             })
         } else {
             var json = {}
@@ -166,9 +164,9 @@ router.post("/login", redirectToDashboard, (req, res, next) => {
             json.message = "Incorrect email or password."
             json.success = false
 
-            return res.send(JSON.stringify(json))
+            return res.end(JSON.stringify(json))
         }
-    }
+    })
 })
     
 router.get("/register", redirectToDashboard, (req, res, next) => {
@@ -176,6 +174,7 @@ router.get("/register", redirectToDashboard, (req, res, next) => {
 })
 
 router.post("/register", redirectToDashboard, registerLimiter, async(req, res, next) => {
+    console.log("running .-....--.-")
     let email = req.body.email
     let password = req.body.password
     let firstName = req.body.firstName
@@ -185,12 +184,6 @@ router.post("/register", redirectToDashboard, registerLimiter, async(req, res, n
     var id = number.toString(36).substr(2, 9)
     id.length >= 9;
     var token = number.toString().substr(1, 25)
-            
-    var json = {}
-    json.type = "success";
-    json.title = "Your account has been registered.";
-    json.message = "Redirecting to login...";
-    json.success = true
 
     let uuid = Date.now().toString(36) + Math.random().toString(36).substr(2, 5).toUpperCase()
 
@@ -204,17 +197,9 @@ router.post("/register", redirectToDashboard, registerLimiter, async(req, res, n
         return res.send(JSON.stringify(json))
     } 
 
-    User.findOne({ Email: email }),async(err, data) => {
+    User.findOne({ Email: email }, async(err, data) => {
         if(err) console.error(err);
-        if (data) {
-            var json = {}
-            json.type = "error"
-            json.title = "Account Exists."
-            json.message = "A user with this email already exists."
-            json.success = false
-
-            return res.send(JSON.stringify(json))
-        } else {
+        try {
             bcrypt.genSalt(10, function(err, salt) {
                 bcrypt.hash(password, salt, function(err, hash) {
                     new User({
@@ -232,18 +217,33 @@ router.post("/register", redirectToDashboard, registerLimiter, async(req, res, n
                         Websites: [""],
                         Premium: false
                     }).save();
+                    console.log("test")
                 });
             });
-        }
-    }
-   
-
+        
         sendMail(email, "Welcome to Stress Free Uptime", "p", emailTemplates.register.replace("{{replace}}", firstName).replace("{{verifyAccountLink}}", `http://127.0.0.1/verify/${uuid}?id=${id}`))
 
         console.log(`Email: ${req.body.email}. Password: ${req.body.password}.`)
-        
+
+        var json = {}
+        json.type = "success";
+        json.title = "Your account has been registered.";
+        json.message = "Redirecting to login...";
+        json.success = true
+
         return res.end(JSON.stringify(json))
-    });
+            
+    } catch(e) {
+        var json = {}
+        json.type = "error"
+        json.title = "Account Exists."
+        json.message = "A user with this email already exists."
+        json.success = false
+
+        return res.end(JSON.stringify(json))
+    }
+    })
+})
 
 router.post("/logout", redirectToLogin, (req, res, next) => {
     req.session.destroy(err => {
@@ -338,7 +338,7 @@ router.post("/admin", adminCheck, (req, res, next) => {
                 json.message = "Insufficient data has been supplied";
             }
 
-            User.findOne({ Id: req.body.id }), async(err, data) => {
+            User.findOne({ Id: req.body.id }, async(err, data) => {
                 if (err) console.error(err);
 
                 if (!data) {
@@ -359,7 +359,7 @@ router.post("/admin", adminCheck, (req, res, next) => {
                         User.updateOne({ Id: req.body.id }), { Premium: true };
                     }
                 }
-            }
+            })
             
             if (data.premium) {
                 var json = {};
@@ -387,7 +387,7 @@ router.post("/admin", adminCheck, (req, res, next) => {
                 return res.status(200).send(JSON.stringify(json));
             }
         case 'authorise':
-            User.findOne({ Email: req.body.email }), async(err, data) => {
+            User.findOne({ Email: req.body.email }, async(err, data) => {
                 if (err) console.error(err);
 
                 if (!data) {
@@ -428,7 +428,7 @@ router.post("/admin", adminCheck, (req, res, next) => {
             }
 
 
-            }
+            })
             break;
                     
         default:

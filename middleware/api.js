@@ -2,22 +2,22 @@ const express = require("express");
 const router = express.Router();
 const User = require("../database/models/User");
 User
-let location = db.collection("data").doc("permissionCheck")
+/*let location = db.collection("data").doc("permissionCheck")
     .get().then((doc) => {
         let blackListedIPs = doc.data().blacklistedIPs
         let authip = doc.data().authip
-
+*/
 
 // Check to see if someone is blacklisted which will be passed as middleware.
 
 const blacklistedCheck = (req, res, next) => {
-    let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+   /* let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     ip = ip.split("::ffff:")[1]
     if (blackListedIPs.includes(ip)) {
         return res.status(502).send(`Your IP: ${ip} is blacklisted from using our services, have a good day.`)
-    } else {
+    } else {*/
         next()
-    }
+    //}
 }
 
 router.get("/", blacklistedCheck, (req, res, next) => {
@@ -138,7 +138,6 @@ router.post("/blacklist", (req, res, next) => {
         }
     }
     
-});
 });
 
 module.exports = router;
