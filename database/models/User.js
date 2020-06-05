@@ -14,7 +14,7 @@ const UserSchema = new Schema({
     VerifyID: String,
     RegisteredIPs: String,
     Websites: Array,
-    Premium: Boolean,
+    Premium: Boolean
 });
 
 module.exports = model("user", UserSchema);
